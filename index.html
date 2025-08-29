@@ -1,0 +1,718 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rétro-planning Détaillé Événement Fallon</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 20px;
+            background-color: #f8f9fa;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #2c3e50, #3498db);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        
+        .header h1 {
+            margin: 0;
+            font-size: 24px;
+        }
+        
+        .info {
+            margin: 10px 0;
+            font-size: 16px;
+        }
+        
+        .resume {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .resume-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+        
+        .resume-item {
+            text-align: center;
+            padding: 10px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            border-left: 4px solid #3498db;
+        }
+        
+        .resume-number {
+            font-size: 24px;
+            font-weight: bold;
+            color: #2c3e50;
+        }
+        
+        .resume-label {
+            font-size: 12px;
+            color: #7f8c8d;
+            margin-top: 5px;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+        
+        th {
+            background: linear-gradient(135deg, #34495e, #2c3e50);
+            color: white;
+            padding: 12px 8px;
+            text-align: left;
+            font-weight: 600;
+            font-size: 13px;
+        }
+        
+        td {
+            padding: 10px 8px;
+            border-bottom: 1px solid #ecf0f1;
+            vertical-align: top;
+            font-size: 12px;
+            line-height: 1.4;
+        }
+        
+        tr:hover {
+            background-color: #f8f9fa;
+        }
+        
+        .semaine {
+            background: linear-gradient(135deg, #3498db, #2980b9);
+            color: white;
+            font-weight: bold;
+            text-align: center;
+            font-size: 11px;
+        }
+        
+        .jour-j {
+            background: linear-gradient(135deg, #e74c3c, #c0392b);
+            color: white;
+            font-weight: bold;
+            text-align: center;
+            font-size: 11px;
+        }
+        
+        .tache {
+            margin-bottom: 8px;
+            padding: 8px;
+            border-radius: 5px;
+            background: #f8f9fa;
+            position: relative;
+            padding-left: 15px;
+        }
+        
+        .tache:before {
+            content: "▶";
+            color: #3498db;
+            font-size: 10px;
+            position: absolute;
+            left: 5px;
+            top: 10px;
+        }
+        
+        .tache-title {
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 3px;
+        }
+        
+        .tache-detail {
+            color: #7f8c8d;
+            font-size: 11px;
+            line-height: 1.3;
+        }
+        
+        .tache-duration {
+            background: #e8f4fd;
+            color: #2980b9;
+            padding: 2px 6px;
+            border-radius: 10px;
+            font-size: 10px;
+            display: inline-block;
+            margin-top: 3px;
+        }
+        
+        .responsable {
+            background: #e8f4fd;
+            color: #2980b9;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 500;
+            text-align: center;
+        }
+        
+        .priorite-critique {
+            background: #fff5f5;
+            border-left: 4px solid #e74c3c;
+        }
+        
+        .priorite-haute {
+            background: #fff8e1;
+            border-left: 4px solid #f39c12;
+        }
+        
+        .priorite-moyenne {
+            background: #f0f8ff;
+            border-left: 4px solid #3498db;
+        }
+        
+        .priorite-normale {
+            background: #f8fff8;
+            border-left: 4px solid #27ae60;
+        }
+        
+        .statut {
+            text-align: center;
+            font-weight: bold;
+            font-size: 11px;
+            padding: 4px;
+        }
+        
+        .statut-encours {
+            background: #fff3cd;
+            color: #856404;
+            border-radius: 5px;
+        }
+        
+        .statut-avenir {
+            background: #d1ecf1;
+            color: #0c5460;
+            border-radius: 5px;
+        }
+        
+        .statut-jourj {
+            background: #f8d7da;
+            color: #721c24;
+            border-radius: 5px;
+        }
+        
+        .dependance {
+            background: #fff3cd;
+            color: #856404;
+            font-size: 10px;
+            padding: 2px 5px;
+            border-radius: 8px;
+            margin-top: 2px;
+            display: inline-block;
+        }
+        
+        .milestone {
+            background: linear-gradient(135deg, #8e44ad, #9b59b6);
+            color: white;
+            font-weight: bold;
+            text-align: center;
+            font-size: 11px;
+        }
+        
+        .legende {
+            background: white;
+            padding: 15px;
+            border-radius: 10px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            margin-top: 20px;
+        }
+        
+        .legende-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 10px;
+            margin-top: 10px;
+        }
+        
+        .legende-item {
+            display: flex;
+            align-items: center;
+            font-size: 11px;
+        }
+        
+        .legende-color {
+            width: 20px;
+            height: 10px;
+            border-radius: 2px;
+            margin-right: 8px;
+        }
+        
+        @media (max-width: 768px) {
+            body {
+                margin: 10px;
+            }
+            
+            table {
+                font-size: 10px;
+            }
+            
+            th, td {
+                padding: 6px 4px;
+            }
+            
+            .header h1 {
+                font-size: 18px;
+            }
+            
+            .resume-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>📋 RÉTRO-PLANNING DÉTAILLÉ - ÉVÉNEMENT FALLON</h1>
+        <div class="info"><strong>📍 Lieu :</strong> Madiana, Martinique</div>
+        <div class="info"><strong>🏢 Organisateur :</strong> Antilles Consultant</div>
+        <div class="info"><strong>📅 Date événement :</strong> Mercredi 16 octobre 2025</div>
+    </div>
+    
+    <div class="resume">
+        <h3>📊 Résumé du projet</h3>
+        <div class="resume-grid">
+            <div class="resume-item">
+                <div class="resume-number">52</div>
+                <div class="resume-label">Jours de préparation</div>
+            </div>
+            <div class="resume-item">
+                <div class="resume-number">8</div>
+                <div class="resume-label">Semaines de travail</div>
+            </div>
+            <div class="resume-item">
+                <div class="resume-number">35+</div>
+                <div class="resume-label">Tâches planifiées</div>
+            </div>
+            <div class="resume-item">
+                <div class="resume-number">6</div>
+                <div class="resume-label">Intervenants clés</div>
+            </div>
+        </div>
+    </div>
+    
+    <table>
+        <thead>
+            <tr>
+                <th style="width: 15%">PÉRIODE</th>
+                <th style="width: 50%">TÂCHES DÉTAILLÉES</th>
+                <th style="width: 15%">RESPONSABLE</th>
+                <th style="width: 10%">DURÉE</th>
+                <th style="width: 10%">STATUT</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- SEMAINE 1 -->
+            <tr>
+                <td class="semaine">SEMAINE 1<br>25-31 août<br><small>Lancement</small></td>
+                <td>
+                    <div class="tache priorite-critique">
+                        <div class="tache-title">🎯 Réunion de lancement projet</div>
+                        <div class="tache-detail">• Date : Jeudi 28 août 14h-17h<br>• Validation rétroplanning complet<br>• Définition rôles et responsabilités<br>• Attribution budget par poste</div>
+                        <span class="tache-duration">3h</span>
+                    </div>
+                    <div class="tache priorite-haute">
+                        <div class="tache-title">📝 Dossier partenaire Fallon V1</div>
+                        <div class="tache-detail">• Rédaction présentation entreprise<br>• Proposition partenariat (niveaux/tarifs)<br>• Avantages et visibilité offerts<br>• Template modifiable</div>
+                        <span class="tache-duration">2 jours</span>
+                    </div>
+                    <div class="tache priorite-haute">
+                        <div class="tache-title">🏢 Contact logistique Madiana</div>
+                        <div class="tache-detail">• Confirmation disponibilité salle<br>• Spécifications techniques (son/éclairage)<br>• Capacité d'accueil et configuration<br>• Tarifs et conditions</div>
+                        <span class="tache-duration">1 jour</span>
+                    </div>
+                    <div class="tache priorite-moyenne">
+                        <div class="tache-title">💰 Budget prévisionnel V1</div>
+                        <div class="tache-detail">• Location salle Madiana<br>• Supports visuels (impression)<br>• Communication digitale<br>• Prestations techniques</div>
+                        <span class="tache-duration">1 jour</span>
+                    </div>
+                </td>
+                <td class="responsable">Équipe complète<br><br>Chef de projet</td>
+                <td class="statut">3-5 jours</td>
+                <td class="statut statut-encours">🔄 EN COURS</td>
+            </tr>
+            
+            <!-- SEMAINE 2 -->
+            <tr>
+                <td class="semaine">SEMAINE 2<br>1-7 septembre<br><small>Partenaires</small></td>
+                <td>
+                    <div class="tache priorite-critique">
+                        <div class="tache-title">📧 Envoi dossier partenaires</div>
+                        <div class="tache-detail">• Finalisation dossier avec tarifs définitifs<br>• Identification cibles partenaires (liste 20+)<br>• Personnalisation par type de partenaire<br>• Envoi avec accusé réception</div>
+                        <span class="tache-duration">2 jours</span>
+                        <div class="dependance">Dépend de: Dossier V1</div>
+                    </div>
+                    <div class="tache priorite-haute">
+                        <div class="tache-title">🎨 Identité visuelle - Création</div>
+                        <div class="tache-detail">• Recherche concepts et couleurs<br>• 3 propositions de charte graphique<br>• Déclinaisons logo événement<br>• Maquettes supports (kakemonos/bâches)</div>
+                        <span class="tache-duration">3 jours</span>
+                    </div>
+                    <div class="tache priorite-moyenne">
+                        <div class="tache-title">📋 Liste invités cibles</div>
+                        <div class="tache-detail">• Segmentation par catégories<br>• Base de données avec contacts<br>• Priorisation VIP/partenaires<br>• Estimation participants (objectif 150-200)</div>
+                        <span class="tache-duration">2 jours</span>
+                    </div>
+                </td>
+                <td class="responsable">Chef de projet<br><br>Designer graphique<br><br>Marketing</td>
+                <td class="statut">3-4 jours</td>
+                <td class="statut statut-avenir">⏳ À VENIR</td>
+            </tr>
+            
+            <!-- SEMAINE 3 -->
+            <tr>
+                <td class="milestone">JALONS S3<br>8-14 septembre<br><small>Validation créa</small></td>
+                <td>
+                    <div class="tache priorite-critique">
+                        <div class="tache-title">✅ Validation identité visuelle</div>
+                        <div class="tache-detail">• Choix définitif charte graphique<br>• Validation kakemonos (2m x 0.8m)<br>• Validation bâches fond de scène (4m x 2m)<br>• Design photocall avec logo partenaires</div>
+                        <span class="tache-duration">1 jour</span>
+                        <div class="dependance">Dépend de: Créations S2</div>
+                    </div>
+                    <div class="tache priorite-haute">
+                        <div class="tache-title">🖨️ Lancement production supports</div>
+                        <div class="tache-detail">• Briefing imprimeur avec fichiers finaux<br>• Délais de production (15 jours min)<br>• Choix matériaux et finitions<br>• Validation BAT et devis</div>
+                        <span class="tache-duration">1 jour</span>
+                    </div>
+                    <div class="tache priorite-moyenne">
+                        <div class="tache-title">📝 Script keynote - Début</div>
+                        <div class="tache-detail">• Structure présentation (30-45min)<br>• Messages clés et storytelling<br>• Coordination avec Carine Bernard<br>• Plan de transitions vidéos</div>
+                        <span class="tache-duration">3 jours</span>
+                    </div>
+                    <div class="tache priorite-moyenne">
+                        <div class="tache-title">🎬 Visuels vidéos - Préparation</div>
+                        <div class="tache-detail">• Storyboard animations<br>• Recherche assets visuels<br>• Templates motion design<br>• Planning tournage si nécessaire</div>
+                        <span class="tache-duration">3 jours</span>
+                    </div>
+                </td>
+                <td class="responsable">Direction<br><br>Production<br><br>Anthony<br><br>Thibault</td>
+                <td class="statut">3-5 jours</td>
+                <td class="statut statut-avenir">⏳ À VENIR</td>
+            </tr>
+            
+            <!-- SEMAINE 4 -->
+            <tr>
+                <td class="semaine">SEMAINE 4<br>15-21 septembre<br><small>Invitations</small></td>
+                <td>
+                    <div class="tache priorite-critique">
+                        <div class="tache-title">📱 Invitations digitales + QR</div>
+                        <div class="tache-detail">• Design invitation personnalisée<br>• Intégration QR code unique par invité<br>• Lien vers formulaire inscription<br>• Test complet du parcours utilisateur</div>
+                        <span class="tache-duration">2 jours</span>
+                    </div>
+                    <div class="tache priorite-haute">
+                        <div class="tache-title">⚙️ Système d'inscriptions</div>
+                        <div class="tache-detail">• Configuration CRM/base données<br>• Programmation scan QR code<br>• Interface gestion accueil<br>• Tests avec différents smartphones</div>
+                        <span class="tache-duration">2 jours</span>
+                    </div>
+                    <div class="tache priorite-moyenne">
+                        <div class="tache-title">🎥 Vidéos teaser + animations</div>
+                        <div class="tache-detail">• Production teaser 30-60sec<br>• Animations pour présentation<br>• Transitions entre slides<br>• Export formats multiples</div>
+                        <span class="tache-duration">4 jours</span>
+                        <div class="dependance">Dépend de: Thibault S3</div>
+                    </div>
+                </td>
+                <td class="responsable">Digital<br><br>Développeur<br><br>Thibault</td>
+                <td class="statut">4-5 jours</td>
+                <td class="statut statut-avenir">⏳ À VENIR</td>
+            </tr>
+            
+            <!-- SEMAINE 5 -->
+            <tr>
+                <td class="semaine">SEMAINE 5<br>22-28 septembre<br><small>Finalisation</small></td>
+                <td>
+                    <div class="tache priorite-haute">
+                        <div class="tache-title">✍️ Script keynote - Finalisation</div>
+                        <div class="tache-detail">• Validation texte définitif avec intervenants<br>• Timing précis (objectif 45min + 15min Q&A)<br>• Points d'interactions audience<br>• Notes techniques régie</div>
+                        <span class="tache-duration">2 jours</span>
+                        <div class="dependance">Dépend de: Script S3</div>
+                    </div>
+                    <div class="tache priorite-haute">
+                        <div class="tache-title">🎨 Habillage visuel final</div>
+                        <div class="tache-detail">• Template PowerPoint branded<br>• Habillage vidéos avec logo<br>• Écrans d'inter et de fin<br>• Cohérence charte graphique</div>
+                        <span class="tache-duration">2 jours</span>
+                    </div>
+                    <div class="tache priorite-critique">
+                        <div class="tache-title">🔧 Test multimédia complet</div>
+                        <div class="tache-detail">• Test vidéos HD sur grand écran<br>• Vérification transitions audio/vidéo<br>• Test bande-son et niveaux<br>• Backup sur plusieurs supports</div>
+                        <span class="tache-duration">1 jour</span>
+                    </div>
+                    <div class="tache priorite-moyenne">
+                        <div class="tache-title">📞 Relance partenaires</div>
+                        <div class="tache-detail">• Suivi des dossiers envoyés<br>• Relance téléphonique personnalisée<br>• Négociations tarifs si besoin<br>• Confirmation engagements</div>
+                        <span class="tache-duration">2 jours</span>
+                    </div>
+                </td>
+                <td class="responsable">Anthony<br><br>Thibault<br><br>Technique<br><br>Commercial</td>
+                <td class="statut">2-3 jours</td>
+                <td class="statut statut-avenir">⏳ À VENIR</td>
+            </tr>
+            
+            <!-- SEMAINE 6 -->
+            <tr>
+                <td class="semaine">SEMAINE 6<br>29 sept-5 octobre<br><small>Production</small></td>
+                <td>
+                    <div class="tache priorite-critique">
+                        <div class="tache-title">🖨️ Impression finale supports</div>
+                        <div class="tache-detail">• Réception BAT définitifs<br>• Validation qualité impression<br>• Bâches 4x2m + Kakemonos 2x0.8m<br>• Photocall + 500 dépliants QR code</div>
+                        <span class="tache-duration">5 jours</span>
+                        <div class="dependance">Délai imprimeur</div>
+                    </div>
+                    <div class="tache priorite-haute">
+                        <div class="tache-title">🔌 Coordination technique Madiana</div>
+                        <div class="tache-detail">• Visite technique avec prestataires<br>• Plan éclairage scène et salle<br>• Config son (micro-casque + retour)<br>• Installation écran géant + vidéoproj</div>
+                        <span class="tache-duration">2 jours</span>
+                    </div>
+                    <div class="tache priorite-moyenne">
+                        <div class="tache-title">📧 Invitations - Dernier envoi</div>
+                        <div class="tache-detail">• Envoi aux retardataires<br>• Relance VIP et partenaires confirmés<br>• Suivi taux d'ouverture/réponse<br>• Ajustements liste selon capacité</div>
+                        <span class="tache-duration">1 jour</span>
+                    </div>
+                </td>
+                <td class="responsable">Production<br><br>Technique<br><br>Communication</td>
+                <td class="statut">5 jours</td>
+                <td class="statut statut-avenir">⏳ À VENIR</td>
+            </tr>
+            
+            <!-- SEMAINE 7 -->
+            <tr>
+                <td class="semaine">SEMAINE 7<br>6-12 octobre<br><small>Finalisation</small></td>
+                <td>
+                    <div class="tache priorite-haute">
+                        <div class="tache-title">📦 Réception supports imprimés</div>
+                        <div class="tache-detail">• Contrôle qualité à réception<br>• Vérification quantités et couleurs<br>• Stockage sécurisé jusqu'à J-1<br>• Organisation transport vers Madiana</div>
+                        <span class="tache-duration">1 jour</span>
+                    </div>
+                    <div class="tache priorite-moyenne">
+                        <div class="tache-title">📰 Kit presse + communiqués</div>
+                        <div class="tache-detail">• Dossier de presse événement<br>• Communiqué avant/pendant/après<br>• Photos haute définition<br>• Contacts médias locaux</div>
+                        <span class="tache-duration">2 jours</span>
+                    </div>
+                    <div class="tache priorite-critique">
+                        <div class="tache-title">🍽️ Logistique accueil & restauration</div>
+                        <div class="tache-detail">• Brief équipe hôtesses (4 personnes)<br>• Organisation cocktail/bar POP<br>• Vérification badges et check-in<br>• Plan de circulation invités</div>
+                        <span class="tache-duration">1 jour</span>
+                    </div>
+                    <div class="tache priorite-haute">
+                        <div class="tache-title">🎭 Répétition interne équipe</div>
+                        <div class="tache-detail">• Run-through complet présentation<br>• Test script + enchaînement vidéos<br>• Chronométrage précis<br>• Ajustements dernière minute</div>
+                        <span class="tache-duration">3h</span>
+                    </div>
+                </td>
+                <td class="responsable">Logistique<br><br>Communication<br><br>Event manager<br><br>Équipe tech</td>
+                <td class="statut">2-3 jours</td>
+                <td class="statut statut-avenir">⏳ À VENIR</td>
+            </tr>
+            
+            <!-- SEMAINE 8 -->
+            <tr>
+                <td class="milestone">JALONS S8<br>13-19 octobre<br><small>Répétitions</small></td>
+                <td>
+                    <div class="tache priorite-critique">
+                        <div class="tache-title">🎪 Répétition générale à Madiana</div>
+                        <div class="tache-detail">• Date : Lundi 13 octobre 14h-18h<br>• Conditions réelles (éclairage/son)<br>• Test complet avec techniciens<br>• Réglage caméras et captation</div>
+                        <span class="tache-duration">4h</span>
+                    </div>
+                    <div class="tache priorite-critique">
+                        <div class="tache-title">👥 Répétition avec intervenants</div>
+                        <div class="tache-detail">• Carine Bernard + Meghane Beuse<br>• Familiarisation avec la scène<br>• Test micro-casque et retour<br>• Validation enchainements</div>
+                        <span class="tache-duration">2h</span>
+                    </div>
+                    <div class="tache priorite-haute">
+                        <div class="tache-title">⏱️ Ajustement timing keynote</div>
+                        <div class="tache-detail">• Chronométrage final précis<br>• Ajustement breaks et interactions<br>• Validation séquence Q&A<br>• Buffer temps pour imprévus</div>
+                        <span class="tache-duration">1h</span>
+                    </div>
+                    <div class="tache priorite-haute">
+                        <div class="tache-title">🤝 Réunion projet finale</div>
+                        <div class="tache-detail">• Date : Jeudi 15 octobre 14h-16h<br>• Checklist complète J-1<br>• Répartition rôles jour J<br>• Contacts urgence et backup</div>
+                        <span class="tache-duration">2h</span>
+                    </div>
+                </td>
+                <td class="responsable">Équipe complète<br><br>C. Bernard<br>M. Beuse<br><br>Direction</td>
+                <td class="statut">3 jours</td>
+                <td class="statut statut-avenir">⏳ À VENIR</td>
+            </tr>
+            
+            <!-- JOUR J -->
+            <tr>
+                <td class="jour-j">JOUR J<br>16 OCTOBRE<br><small>Événement</small></td>
+                <td>
+                    <div class="tache priorite-critique">
+                        <div class="tache-title">🏗️ Installation scénographie</div>
+                        <div class="tache-detail">• Arrivée équipe 7h00<br>• Installation bâches fond de scène<br>• Placement kakemonos et photocall<br>• Test final son/lumière/vidéo</div>
+                        <span class="tache-duration">7h-10h</span>
+                    </div>
+                    <div class="tache priorite-haute">
+                        <div class="tache-title">👥 Brief équipes</div>
+                        <div class="tache-detail">• 10h00 : Brief hôtesses accueil<br>• 10h30 : Brief techniciens régie<br>• Vérification matériel scan QR<br>• Test dernier système inscription</div>
+                        <span class="tache-duration">10h-11h</span>
+                    </div>
+                    <div class="tache priorite-critique">
+                        <div class="tache-title">🎫 Accueil & contrôle entrée</div>
+                        <div class="tache-detail">• Ouverture 14h00<br>• Scan QR code + remise badge<br>• Accueil VIP et partenaires<br>• Gestion liste d'attente</div>
+                        <span class="tache-duration">14h-15h</span>
+                    </div>
+                    <div class="tache priorite-critique">
+                        <div class="tache-title">🎤 KEYNOTE FALLON</div>
+                        <div class="tache-detail">• 15h00-16h00 : Présentation principale<br>• Carine Bernard & Meghane Beuse<br>• Support vidéo et animations<br>• 16h00-16h15 : Session Q&A</div>
+                        <span class="tache-duration">15h-16h15</span>
+                    </div>
+                    <div class="tache priorite-moyenne">
+                        <div class="tache-title">🍸 Bar POP + Networking</div>
+                        <div class="tache-detail">• 16h15-18h30 : Cocktail networking<br>• Animation bar à thème<br>• Échanges libres avec intervenants<br>• Prises de photos photocall</div>
+                        <span class="tache-duration">16h15-18h30</span>
+                    </div>
+                    <div class="tache priorite-normale">
+                        <div class="tache-title">📸 Captation & diffusion</div>
+                        <div class="tache-detail">• Photos événement haute qualité<br>• Extraits vidéo pour réseaux sociaux<br>• Live tweets moments clés<br>• Collecte témoignages participants</div>
+                        <span class="tache-duration">14h-18h30</span>
+                    </div>
+                </td>
+                <td class="responsable">Équipe complète<br><br>C. Bernard<br>M. Beuse<br><br>Communication<br><br>Technique</td>
+                <td class="statut">Toute la journée</td>
+                <td class="statut statut-jourj">🎯 JOUR J</td>
+            </tr>
+            
+            <!-- POST-ÉVÉNEMENT -->
+            <tr>
+                <td class="milestone">POST-EVENT<br>17-19 octobre<br><small>Suivi</small></td>
+                <td>
+                    <div class="tache priorite-haute">
+                        <div class="tache-title">📊 Bilan et analyse</div>
+                        <div class="tache-detail">• Comptage participants final<br>• Analyse satisfaction (sondage express)<br>• ROI partenaires et sponsors<br>• Retours équipe et intervenants</div>
+                        <span class="tache-duration">J+1</span>
+                    </div>
+                    <div class="tache priorite-moyenne">
+                        <div class="tache-title">📧 Suivi participants</div>
+                        <div class="tache-detail">• Mail de remerciement personnalisé<br>• Envoi photos et supports présentation<br>• Questionnaire de satisfaction<br>• Proposition rendez-vous commerciaux</div>
+                        <span class="tache-duration">J+2</span>
+                    </div>
+                    <div class="tache priorite-normale">
+                        <div class="tache-title">📋 Rapport final projet</div>
+                        <div class="tache-detail">• Bilan financier complet<br>• Analyse des objectifs atteints<br>• Recommandations pour futurs événements<br>• Archivage documents et médias</div>
+                        <span class="tache-duration">J+3</span>
+                    </div>
+                </td>
+                <td class="responsable">Direction<br><br>Marketing<br><br>Chef de projet</td>
+                <td class="statut">3 jours</td>
+                <td class="statut statut-avenir">⏳ SUIVI</td>
+            </tr>
+        </tbody>
+    </table>
+    
+    <div class="legende">
+        <h4>📌 Légende des priorités et codes couleur</h4>
+        <div class="legende-grid">
+            <div class="legende-item">
+                <div class="legende-color" style="background: #e74c3c;"></div>
+                <span>Critique - Bloquant pour la suite</span>
+            </div>
+            <div class="legende-item">
+                <div class="legende-color" style="background: #f39c12;"></div>
+                <span>Haute - Important pour la qualité</span>
+            </div>
+            <div class="legende-item">
+                <div class="legende-color" style="background: #3498db;"></div>
+                <span>Moyenne - Amélioration expérience</span>
+            </div>
+            <div class="legende-item">
+                <div class="legende-color" style="background: #27ae60;"></div>
+                <span>Normale - Confort et finition</span>
+            </div>
+            <div class="legende-item">
+                <div class="legende-color" style="background: #8e44ad;"></div>
+                <span>Jalon - Point de validation clé</span>
+            </div>
+            <div class="legende-item">
+                <div class="legende-color" style="background: #34495e;"></div>
+                <span>Jour J - Exécution événement</span>
+            </div>
+        </div>
+    </div>
+    
+    <div class="resume" style="margin-top: 20px;">
+        <h4>⚠️ Points d'attention et risques identifiés</h4>
+        <div style="background: #fff3cd; padding: 15px; border-radius: 8px; margin-top: 10px;">
+            <strong>🔥 Risques critiques :</strong>
+            <ul style="margin: 10px 0; padding-left: 20px;">
+                <li><strong>Délais impression</strong> : 15 jours minimum requis - commande impérative avant 25 septembre</li>
+                <li><strong>Disponibilité Madiana</strong> : Confirmation technique urgente (son/éclairage/écran)</li>
+                <li><strong>Intervenants</strong> : Planning Carine Bernard et Meghane Beuse à sécuriser rapidement</li>
+                <li><strong>Budget partenaires</strong> : Objectif revenus à définir et valider d'ici fin août</li>
+            </ul>
+        </div>
+        
+        <div style="background: #d1ecf1; padding: 15px; border-radius: 8px; margin-top: 15px;">
+            <strong>📋 Actions immédiates (Semaine 1) :</strong>
+            <ul style="margin: 10px 0; padding-left: 20px;">
+                <li>Organiser réunion lancement jeudi 28 août 14h</li>
+                <li>Contacter Madiana pour visite technique</li>
+                <li>Définir budget global et objectifs financiers</li>
+                <li>Commencer rédaction dossier partenaire</li>
+                <li>Identifier et contacter designer pour identité visuelle</li>
+            </ul>
+        </div>
+        
+        <div style="background: #d4edda; padding: 15px; border-radius: 8px; margin-top: 15px;">
+            <strong>🎯 Objectifs mesurables :</strong>
+            <ul style="margin: 10px 0; padding-left: 20px;">
+                <li><strong>Participants</strong> : 150-200 personnes (objectif optimal 175)</li>
+                <li><strong>Partenaires</strong> : 8-12 sponsors avec contributions financières</li>
+                <li><strong>Médias</strong> : 5+ retombées presse locale et spécialisée</li>
+                <li><strong>Satisfaction</strong> : >85% participants satisfaits ou très satisfaits</li>
+                <li><strong>ROI</strong> : Équilibrer budget avec revenus partenariats</li>
+            </ul>
+        </div>
+    </div>
+    
+    <div style="text-align: center; margin-top: 30px; padding: 20px; background: white; border-radius: 10px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+        <h4>📞 Contacts d'urgence projet</h4>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-top: 15px;">
+            <div>
+                <strong>🎯 Chef de projet</strong><br>
+                <small>Coordination générale</small>
+            </div>
+            <div>
+                <strong>🎨 Anthony</strong><br>
+                <small>Script & contenu</small>
+            </div>
+            <div>
+                <strong>🎬 Thibault</strong><br>
+                <small>Visuels & vidéos</small>
+            </div>
+            <div>
+                <strong>🎤 Intervenants</strong><br>
+                <small>C. Bernard & M. Beuse</small>
+            </div>
+            <div>
+                <strong>🏢 Madiana</strong><br>
+                <small>Technique & logistique</small>
+            </div>
+            <div>
+                <strong>🖨️ Imprimeur</strong><br>
+                <small>Production supports</small>
+            </div>
+        </div>
+    </div>
+    
+    <footer style="text-align: center; margin-top: 20px; color: #7f8c8d; font-size: 12px;">
+        <p>📋 Rétro-planning généré le 28 août 2025 • 🏢 Antilles Consultant • 📍 Madiana, Martinique</p>
+        <p><em>Document de travail - Version 1.0 - À actualiser selon avancement projet</em></p>
+    </footer>
+</body>
+</html>
