@@ -3,716 +3,2029 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Rétro-planning Détaillé Événement Fallon</title>
+    <title>📋 Planning Fallon Mobile</title>
     <style>
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            margin: 20px;
-            background-color: #f8f9fa;
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
         
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #f5f5f5;
+            color: #333;
+            line-height: 1.4;
+            padding: 10px;
+        }
+        
+        .container {
+            max-width: 100%;
+            margin: 0 auto;
+        }
+        
+        /* HEADER */
         .header {
-            background: linear-gradient(135deg, #2c3e50, #3498db);
+            background: #2563eb;
             color: white;
-            padding: 20px;
-            border-radius: 10px;
-            margin-bottom: 20px;
+            padding: 20px 15px;
+            border-radius: 15px;
             text-align: center;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            margin-bottom: 15px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
         }
         
         .header h1 {
-            margin: 0;
-            font-size: 24px;
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 10px;
         }
         
-        .info {
-            margin: 10px 0;
-            font-size: 16px;
+        .header-info {
+            font-size: 14px;
+            opacity: 0.9;
+            margin: 5px 0;
         }
         
-        .resume {
-            background: white;
-            padding: 20px;
-            border-radius: 10px;
-            margin-bottom: 20px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        }
-        
-        .resume-grid {
+        /* RÉSUMÉ STATS */
+        .stats {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 15px;
-            margin-top: 15px;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            margin-bottom: 20px;
         }
         
-        .resume-item {
+        .stat-card {
+            background: white;
+            padding: 15px;
+            border-radius: 12px;
             text-align: center;
-            padding: 10px;
-            background: #f8f9fa;
-            border-radius: 8px;
-            border-left: 4px solid #3498db;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            border-left: 4px solid #2563eb;
         }
         
-        .resume-number {
+        .stat-number {
             font-size: 24px;
-            font-weight: bold;
-            color: #2c3e50;
+            font-weight: 800;
+            color: white;
+            display: block;
         }
         
-        .resume-label {
+        .stat-label {
             font-size: 12px;
-            color: #7f8c8d;
+            color: #6b7280;
             margin-top: 5px;
         }
         
-        table {
-            width: 100%;
-            border-collapse: collapse;
+        /* BOUTONS NAVIGATION */
+        .nav-buttons {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 15px;
+            overflow-x: auto;
+            padding: 5px 0;
+        }
+        
+        .nav-btn {
             background: white;
-            border-radius: 10px;
-            overflow: hidden;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-            margin-bottom: 20px;
-        }
-        
-        th {
-            background: linear-gradient(135deg, #34495e, #2c3e50);
-            color: white;
-            padding: 12px 8px;
-            text-align: left;
-            font-weight: 600;
-            font-size: 13px;
-        }
-        
-        td {
-            padding: 10px 8px;
-            border-bottom: 1px solid #ecf0f1;
-            vertical-align: top;
+            border: 2px solid #e5e7eb;
+            padding: 8px 15px;
+            border-radius: 25px;
             font-size: 12px;
-            line-height: 1.4;
+            font-weight: 600;
+            color: #374151;
+            cursor: pointer;
+            white-space: nowrap;
+            transition: all 0.3s ease;
+            min-width: fit-content;
         }
         
-        tr:hover {
-            background-color: #f8f9fa;
-        }
-        
-        .semaine {
-            background: linear-gradient(135deg, #3498db, #2980b9);
+        .nav-btn:hover, .nav-btn.active {
+            background: #2563eb;
             color: white;
-            font-weight: bold;
-            text-align: center;
-            font-size: 11px;
+            border-color: #2563eb;
         }
         
-        .jour-j {
-            background: linear-gradient(135deg, #e74c3c, #c0392b);
+        /* CARDS SEMAINES */
+        .semaine-card {
+            background: white;
+            margin-bottom: 15px;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            border-left: 5px solid #2563eb;
+        }
+        
+        .semaine-header {
+            background: #2563eb;
             color: white;
-            font-weight: bold;
-            text-align: center;
-            font-size: 11px;
-        }
-        
-        .tache {
-            margin-bottom: 8px;
-            padding: 8px;
-            border-radius: 5px;
-            background: #f8f9fa;
+            padding: 15px;
             position: relative;
-            padding-left: 15px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
         
-        .tache:before {
-            content: "▶";
-            color: #3498db;
-            font-size: 10px;
-            position: absolute;
-            left: 5px;
-            top: 10px;
+        .semaine-title {
+            font-size: 16px;
+            font-weight: 700;
+        }
+        
+        .semaine-dates {
+            font-size: 12px;
+            opacity: 0.9;
+            margin-top: 2px;
+        }
+        
+        .semaine-toggle {
+            font-size: 20px;
+            transition: transform 0.3s ease;
+        }
+        
+        .semaine-content {
+            padding: 15px;
+            display: none;
+        }
+        
+        .semaine-content.active {
+            display: block;
+        }
+        
+        .semaine-card.collapsed .semaine-toggle {
+            transform: rotate(180deg);
+        }
+        
+        /* TÂCHES */
+        .tache-mobile {
+            background: #f9fafb;
+            margin-bottom: 12px;
+            padding: 12px;
+            border-radius: 10px;
+            border-left: 4px solid #d1d5db;
+            position: relative;
+        }
+        
+        .tache-mobile.critique {
+            border-left-color: #dc2626;
+            background: #fef2f2;
+        }
+        
+        .tache-mobile.haute {
+            border-left-color: #f59e0b;
+            background: #fffbeb;
+        }
+        
+        .tache-mobile.moyenne {
+            border-left-color: #3b82f6;
+            background: #eff6ff;
+        }
+        
+        .tache-mobile.normale {
+            border-left-color: #10b981;
+            background: #f0fdf4;
         }
         
         .tache-title {
-            font-weight: bold;
-            color: #2c3e50;
-            margin-bottom: 3px;
-        }
-        
-        .tache-detail {
-            color: #7f8c8d;
-            font-size: 11px;
+            font-size: 14px;
+            font-weight: 700;
+            color: #1f2937;
+            margin-bottom: 8px;
             line-height: 1.3;
         }
         
-        .tache-duration {
-            background: #e8f4fd;
-            color: #2980b9;
-            padding: 2px 6px;
-            border-radius: 10px;
-            font-size: 10px;
-            display: inline-block;
-            margin-top: 3px;
+        .tache-details {
+            font-size: 13px;
+            color: #4b5563;
+            line-height: 1.4;
+            margin-bottom: 8px;
         }
         
-        .responsable {
-            background: #e8f4fd;
-            color: #2980b9;
+        .tache-details ul {
+            padding-left: 15px;
+            margin: 5px 0;
+        }
+        
+        .tache-details li {
+            margin-bottom: 3px;
+        }
+        
+        .tache-meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            align-items: center;
+        }
+        
+        .tache-duration, .tache-responsable {
+            background: #e5e7eb;
+            color: #374151;
             padding: 4px 8px;
-            border-radius: 12px;
+            border-radius: 15px;
             font-size: 11px;
-            font-weight: 500;
-            text-align: center;
+            font-weight: 600;
         }
         
-        .priorite-critique {
-            background: #fff5f5;
-            border-left: 4px solid #e74c3c;
+        .tache-responsable {
+            background: #dbeafe;
+            color: #1d4ed8;
         }
         
-        .priorite-haute {
-            background: #fff8e1;
-            border-left: 4px solid #f39c12;
-        }
-        
-        .priorite-moyenne {
-            background: #f0f8ff;
-            border-left: 4px solid #3498db;
-        }
-        
-        .priorite-normale {
-            background: #f8fff8;
-            border-left: 4px solid #27ae60;
-        }
-        
-        .statut {
-            text-align: center;
-            font-weight: bold;
-            font-size: 11px;
-            padding: 4px;
-        }
-        
-        .statut-encours {
-            background: #fff3cd;
-            color: #856404;
-            border-radius: 5px;
-        }
-        
-        .statut-avenir {
-            background: #d1ecf1;
-            color: #0c5460;
-            border-radius: 5px;
-        }
-        
-        .statut-jourj {
-            background: #f8d7da;
-            color: #721c24;
-            border-radius: 5px;
+        .tache-critique .tache-duration {
+            background: #fee2e2;
+            color: #991b1b;
         }
         
         .dependance {
-            background: #fff3cd;
-            color: #856404;
+            background: #fef3c7;
+            color: #92400e;
+            padding: 3px 8px;
+            border-radius: 10px;
             font-size: 10px;
-            padding: 2px 5px;
-            border-radius: 8px;
-            margin-top: 2px;
+            margin-top: 5px;
             display: inline-block;
         }
         
-        .milestone {
-            background: linear-gradient(135deg, #8e44ad, #9b59b6);
-            color: white;
-            font-weight: bold;
-            text-align: center;
-            font-size: 11px;
+        /* JOUR J SPÉCIAL */
+        .jour-j {
+            border-left-color: #dc2626 !important;
+            background: white !important;
         }
         
-        .legende {
+        .jour-j .semaine-header {
+            background: #dc2626;
+        }
+        
+        /* URGENCE INDICATOR */
+        .urgence-dot {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #dc2626;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.5; }
+            100% { opacity: 1; }
+        }
+        
+        /* LÉGENDE MOBILE */
+        .legende-mobile {
             background: white;
             padding: 15px;
-            border-radius: 10px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            border-radius: 15px;
             margin-top: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
         }
         
-        .legende-grid {
+        .legende-title {
+            font-size: 16px;
+            font-weight: 700;
+            color: #1f2937;
+            margin-bottom: 12px;
+            text-align: center;
+        }
+        
+        .legende-items {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-            gap: 10px;
-            margin-top: 10px;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
         }
         
         .legende-item {
             display: flex;
             align-items: center;
-            font-size: 11px;
+            font-size: 12px;
+            color: #374151;
         }
         
         .legende-color {
-            width: 20px;
-            height: 10px;
-            border-radius: 2px;
+            width: 12px;
+            height: 12px;
+            border-radius: 3px;
             margin-right: 8px;
+            flex-shrink: 0;
         }
         
-        @media (max-width: 768px) {
+        /* STICKY HEADER */
+        .sticky-progress {
+            position: sticky;
+            top: 0;
+            background: white;
+            padding: 10px 15px;
+            border-bottom: 1px solid #e5e7eb;
+            z-index: 100;
+            margin: 0 -10px 15px -10px;
+        }
+        
+        .progress-bar {
+            height: 6px;
+            background: #e5e7eb;
+            border-radius: 3px;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: #2563eb;
+            width: 12.5%; /* 1/8 semaines */
+            transition: width 0.3s ease;
+        }
+        
+        .progress-text {
+            font-size: 12px;
+            color: #6b7280;
+            margin-top: 5px;
+            text-align: center;
+        }
+        
+        /* FLOATING ACTION BUTTON */
+        .fab {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 56px;
+            height: 56px;
+            background: #2563eb;
+            border-radius: 50%;
+            color: white;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            z-index: 1000;
+            transition: transform 0.3s ease;
+        }
+        
+        .fab:hover {
+            transform: scale(1.1);
+            background: #1d4ed8;
+        }
+        
+        /* RECHERCHE */
+        .search-container {
+            position: relative;
+            margin-bottom: 15px;
+        }
+        
+        .search-input {
+            width: 100%;
+            padding: 12px 20px 12px 45px;
+            border: 2px solid #e5e7eb;
+            border-radius: 25px;
+            font-size: 14px;
+            background: white;
+            color: #1f2937;
+            transition: border-color 0.3s ease;
+        }
+        
+        .search-input:focus {
+            outline: none;
+            border-color: #2563eb;
+        }
+        
+        .search-icon {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #6b7280;
+            font-size: 16px;
+        }
+        
+        /* RESPONSIVE OPTIMISATIONS */
+        @media (max-width: 480px) {
             body {
-                margin: 10px;
+                padding: 5px;
             }
             
-            table {
-                font-size: 10px;
-            }
-            
-            th, td {
-                padding: 6px 4px;
+            .header {
+                padding: 15px 10px;
             }
             
             .header h1 {
                 font-size: 18px;
             }
             
-            .resume-grid {
-                grid-template-columns: 1fr 1fr;
+            .stats {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 8px;
+            }
+            
+            .stat-card {
+                padding: 12px 8px;
+            }
+            
+            .stat-number {
+                font-size: 20px;
+            }
+            
+            .semaine-content {
+                padding: 12px;
+            }
+            
+            .tache-mobile {
+                padding: 10px;
+                margin-bottom: 10px;
+            }
+        }
+        
+        /* DARK MODE SUPPORT */
+        @media (prefers-color-scheme: dark) {
+            body {
+                background: #1a1a1a;
+                color: #e9ecef;
+            }
+            
+            .semaine-card, .stat-card, .legende-mobile {
+                background: #2d3748;
+            }
+            
+            .search-input {
+                background: #2d3748;
+                border-color: #4a5568;
+                color: #e9ecef;
             }
         }
     </style>
 </head>
 <body>
-    <div class="header">
-        <h1>📋 RÉTRO-PLANNING DÉTAILLÉ - ÉVÉNEMENT FALLON</h1>
-        <div class="info"><strong>📍 Lieu :</strong> Madiana, Martinique</div>
-        <div class="info"><strong>🏢 Organisateur :</strong> Antilles Consultant</div>
-        <div class="info"><strong>📅 Date événement :</strong> Mercredi 16 octobre 2025</div>
-    </div>
-    
-    <div class="resume">
-        <h3>📊 Résumé du projet</h3>
-        <div class="resume-grid">
-            <div class="resume-item">
-                <div class="resume-number">52</div>
-                <div class="resume-label">Jours de préparation</div>
+    <div class="container">
+        <!-- HEADER MOBILE -->
+        <div class="header">
+            <h1>📋 Planning Fallon</h1>
+            <div class="header-info">📍 Madiana • 🏢 Antilles Consultant</div>
+            <div class="header-info">📅 16 octobre 2025</div>
+        </div>
+        
+        <!-- STATS RAPIDES -->
+        <div class="stats">
+            <div class="stat-card">
+                <span class="stat-number">52</span>
+                <div class="stat-label">Jours restants</div>
             </div>
-            <div class="resume-item">
-                <div class="resume-number">8</div>
-                <div class="resume-label">Semaines de travail</div>
+            <div class="stat-card">
+                <span class="stat-number">8</span>
+                <div class="stat-label">Semaines</div>
             </div>
-            <div class="resume-item">
-                <div class="resume-number">35+</div>
-                <div class="resume-label">Tâches planifiées</div>
+            <div class="stat-card">
+                <span class="stat-number">35+</span>
+                <div class="stat-label">Tâches</div>
             </div>
-            <div class="resume-item">
-                <div class="resume-number">6</div>
-                <div class="resume-label">Intervenants clés</div>
+            <div class="stat-card">
+                <span class="stat-number">6</span>
+                <div class="stat-label">Intervenants</div>
             </div>
         </div>
-    </div>
-    
-    <table>
-        <thead>
-            <tr>
-                <th style="width: 15%">PÉRIODE</th>
-                <th style="width: 50%">TÂCHES DÉTAILLÉES</th>
-                <th style="width: 15%">RESPONSABLE</th>
-                <th style="width: 10%">DURÉE</th>
-                <th style="width: 10%">STATUT</th>
-            </tr>
-        </thead>
-        <tbody>
+        
+        <!-- BARRE DE PROGRESSION -->
+        <div class="sticky-progress">
+            <div class="progress-bar">
+                <div class="progress-fill"></div>
+            </div>
+            <div class="progress-text">Semaine 1/8 • Phase lancement</div>
+        </div>
+        
+        <!-- RECHERCHE -->
+        <div class="search-container">
+            <span class="search-icon">🔍</span>
+            <input type="text" class="search-input" placeholder="Rechercher une tâche..." id="searchInput">
+        </div>
+        
+        <!-- NAVIGATION RAPIDE -->
+        <div class="nav-buttons">
+            <button class="nav-btn active" onclick="showAll(); updateActiveButton(this);">📋 Tout</button>
+            <button class="nav-btn" onclick="filterByPriority('critique'); updateActiveButton(this);">🔥 Urgent</button>
+            <button class="nav-btn" onclick="filterByResponsable('Anthony'); updateActiveButton(this);">👨 Anthony</button>
+            <button class="nav-btn" onclick="filterByResponsable('Thibault'); updateActiveButton(this);">🎬 Thibault</button>
+            <button class="nav-btn" onclick="jumpToJourJ(); updateActiveButton(this);">🎯 Jour J</button>
+        </div>
+        
+        <!-- SEMAINES -->
+        <div id="semaines-container">
             <!-- SEMAINE 1 -->
-            <tr>
-                <td class="semaine">SEMAINE 1<br>25-31 août<br><small>Lancement</small></td>
-                <td>
-                    <div class="tache priorite-critique">
+            <div class="semaine-card" data-semaine="1">
+                <div class="semaine-header" onclick="toggleSemaine(1)">
+                    <div>
+                        <div class="semaine-title">SEMAINE 1 • Lancement</div>
+                        <div class="semaine-dates">25-31 août</div>
+                    </div>
+                    <div class="semaine-toggle">▼</div>
+                </div>
+                <div class="semaine-content active">
+                    <div class="tache-mobile critique" data-priority="critique" data-responsable="Équipe">
+                        <div class="urgence-dot"></div>
                         <div class="tache-title">🎯 Réunion de lancement projet</div>
-                        <div class="tache-detail">• Date : Jeudi 28 août 14h-17h<br>• Validation rétroplanning complet<br>• Définition rôles et responsabilités<br>• Attribution budget par poste</div>
-                        <span class="tache-duration">3h</span>
+                        <div class="tache-details">
+                            <ul>
+                                <li>📅 Jeudi 28 août 14h-17h</li>
+                                <li>✅ Validation rétroplanning complet</li>
+                                <li>👥 Définition rôles et responsabilités</li>
+                                <li>💰 Attribution budget par poste</li>
+                            </ul>
+                        </div>
+                        <div class="tache-meta">
+                            <span class="tache-duration">⏱️ 3h</span>
+                            <span class="tache-responsable">👥 Équipe complète</span>
+                        </div>
                     </div>
-                    <div class="tache priorite-haute">
+                    
+                    <div class="tache-mobile haute" data-priority="haute">
                         <div class="tache-title">📝 Dossier partenaire Fallon V1</div>
-                        <div class="tache-detail">• Rédaction présentation entreprise<br>• Proposition partenariat (niveaux/tarifs)<br>• Avantages et visibilité offerts<br>• Template modifiable</div>
-                        <span class="tache-duration">2 jours</span>
+                        <div class="tache-details">
+                            <ul>
+                                <li>📄 Rédaction présentation entreprise</li>
+                                <li>💼 Proposition partenariat (niveaux/tarifs)</li>
+                                <li>👁️ Avantages et visibilité offerts</li>
+                                <li>📝 Template modifiable</li>
+                            </ul>
+                        </div>
+                        <div class="tache-meta">
+                            <span class="tache-duration">⏱️ 2 jours</span>
+                            <span class="tache-responsable">📋 Chef projet</span>
+                        </div>
                     </div>
-                    <div class="tache priorite-haute">
+                    
+                    <div class="tache-mobile haute" data-priority="haute">
                         <div class="tache-title">🏢 Contact logistique Madiana</div>
-                        <div class="tache-detail">• Confirmation disponibilité salle<br>• Spécifications techniques (son/éclairage)<br>• Capacité d'accueil et configuration<br>• Tarifs et conditions</div>
-                        <span class="tache-duration">1 jour</span>
+                        <div class="tache-details">
+                            <ul>
+                                <li>✅ Confirmation disponibilité salle</li>
+                                <li>🎵 Spécifications techniques (son/éclairage)</li>
+                                <li>👥 Capacité d'accueil et configuration</li>
+                                <li>💰 Tarifs et conditions</li>
+                            </ul>
+                        </div>
+                        <div class="tache-meta">
+                            <span class="tache-duration">⏱️ 1 jour</span>
+                        </div>
                     </div>
-                    <div class="tache priorite-moyenne">
+                    
+                    <div class="tache-mobile moyenne" data-priority="moyenne">
                         <div class="tache-title">💰 Budget prévisionnel V1</div>
-                        <div class="tache-detail">• Location salle Madiana<br>• Supports visuels (impression)<br>• Communication digitale<br>• Prestations techniques</div>
-                        <span class="tache-duration">1 jour</span>
+                        <div class="tache-details">
+                            <ul>
+                                <li>🏢 Location salle Madiana</li>
+                                <li>🖨️ Supports visuels (impression)</li>
+                                <li>📱 Communication digitale</li>
+                                <li>🎵 Prestations techniques</li>
+                            </ul>
+                        </div>
+                        <div class="tache-meta">
+                            <span class="tache-duration">⏱️ 1 jour</span>
+                        </div>
                     </div>
-                </td>
-                <td class="responsable">Équipe complète<br><br>Chef de projet</td>
-                <td class="statut">3-5 jours</td>
-                <td class="statut statut-encours">🔄 EN COURS</td>
-            </tr>
-            
-            <!-- SEMAINE 2 -->
-            <tr>
-                <td class="semaine">SEMAINE 2<br>1-7 septembre<br><small>Partenaires</small></td>
-                <td>
-                    <div class="tache priorite-critique">
-                        <div class="tache-title">📧 Envoi dossier partenaires</div>
-                        <div class="tache-detail">• Finalisation dossier avec tarifs définitifs<br>• Identification cibles partenaires (liste 20+)<br>• Personnalisation par type de partenaire<br>• Envoi avec accusé réception</div>
-                        <span class="tache-duration">2 jours</span>
-                        <div class="dependance">Dépend de: Dossier V1</div>
-                    </div>
-                    <div class="tache priorite-haute">
-                        <div class="tache-title">🎨 Identité visuelle - Création</div>
-                        <div class="tache-detail">• Recherche concepts et couleurs<br>• 3 propositions de charte graphique<br>• Déclinaisons logo événement<br>• Maquettes supports (kakemonos/bâches)</div>
-                        <span class="tache-duration">3 jours</span>
-                    </div>
-                    <div class="tache priorite-moyenne">
-                        <div class="tache-title">📋 Liste invités cibles</div>
-                        <div class="tache-detail">• Segmentation par catégories<br>• Base de données avec contacts<br>• Priorisation VIP/partenaires<br>• Estimation participants (objectif 150-200)</div>
-                        <span class="tache-duration">2 jours</span>
-                    </div>
-                </td>
-                <td class="responsable">Chef de projet<br><br>Designer graphique<br><br>Marketing</td>
-                <td class="statut">3-4 jours</td>
-                <td class="statut statut-avenir">⏳ À VENIR</td>
-            </tr>
-            
-            <!-- SEMAINE 3 -->
-            <tr>
-                <td class="milestone">JALONS S3<br>8-14 septembre<br><small>Validation créa</small></td>
-                <td>
-                    <div class="tache priorite-critique">
-                        <div class="tache-title">✅ Validation identité visuelle</div>
-                        <div class="tache-detail">• Choix définitif charte graphique<br>• Validation kakemonos (2m x 0.8m)<br>• Validation bâches fond de scène (4m x 2m)<br>• Design photocall avec logo partenaires</div>
-                        <span class="tache-duration">1 jour</span>
-                        <div class="dependance">Dépend de: Créations S2</div>
-                    </div>
-                    <div class="tache priorite-haute">
-                        <div class="tache-title">🖨️ Lancement production supports</div>
-                        <div class="tache-detail">• Briefing imprimeur avec fichiers finaux<br>• Délais de production (15 jours min)<br>• Choix matériaux et finitions<br>• Validation BAT et devis</div>
-                        <span class="tache-duration">1 jour</span>
-                    </div>
-                    <div class="tache priorite-moyenne">
-                        <div class="tache-title">📝 Script keynote - Début</div>
-                        <div class="tache-detail">• Structure présentation (30-45min)<br>• Messages clés et storytelling<br>• Coordination avec Carine Bernard<br>• Plan de transitions vidéos</div>
-                        <span class="tache-duration">3 jours</span>
-                    </div>
-                    <div class="tache priorite-moyenne">
-                        <div class="tache-title">🎬 Visuels vidéos - Préparation</div>
-                        <div class="tache-detail">• Storyboard animations<br>• Recherche assets visuels<br>• Templates motion design<br>• Planning tournage si nécessaire</div>
-                        <span class="tache-duration">3 jours</span>
-                    </div>
-                </td>
-                <td class="responsable">Direction<br><br>Production<br><br>Anthony<br><br>Thibault</td>
-                <td class="statut">3-5 jours</td>
-                <td class="statut statut-avenir">⏳ À VENIR</td>
-            </tr>
-            
-            <!-- SEMAINE 4 -->
-            <tr>
-                <td class="semaine">SEMAINE 4<br>15-21 septembre<br><small>Invitations</small></td>
-                <td>
-                    <div class="tache priorite-critique">
-                        <div class="tache-title">📱 Invitations digitales + QR</div>
-                        <div class="tache-detail">• Design invitation personnalisée<br>• Intégration QR code unique par invité<br>• Lien vers formulaire inscription<br>• Test complet du parcours utilisateur</div>
-                        <span class="tache-duration">2 jours</span>
-                    </div>
-                    <div class="tache priorite-haute">
-                        <div class="tache-title">⚙️ Système d'inscriptions</div>
-                        <div class="tache-detail">• Configuration CRM/base données<br>• Programmation scan QR code<br>• Interface gestion accueil<br>• Tests avec différents smartphones</div>
-                        <span class="tache-duration">2 jours</span>
-                    </div>
-                    <div class="tache priorite-moyenne">
-                        <div class="tache-title">🎥 Vidéos teaser + animations</div>
-                        <div class="tache-detail">• Production teaser 30-60sec<br>• Animations pour présentation<br>• Transitions entre slides<br>• Export formats multiples</div>
-                        <span class="tache-duration">4 jours</span>
-                        <div class="dependance">Dépend de: Thibault S3</div>
-                    </div>
-                </td>
-                <td class="responsable">Digital<br><br>Développeur<br><br>Thibault</td>
-                <td class="statut">4-5 jours</td>
-                <td class="statut statut-avenir">⏳ À VENIR</td>
-            </tr>
+                </div>
+            </div>
             
             <!-- SEMAINE 5 -->
-            <tr>
-                <td class="semaine">SEMAINE 5<br>22-28 septembre<br><small>Finalisation</small></td>
-                <td>
-                    <div class="tache priorite-haute">
+            <div class="semaine-card" data-semaine="5">
+                <div class="semaine-header" onclick="toggleSemaine(5)">
+                    <div>
+                        <div class="semaine-title">SEMAINE 5 • Finalisation</div>
+                        <div class="semaine-dates">22-28 septembre</div>
+                    </div>
+                    <div class="semaine-toggle">▼</div>
+                </div>
+                <div class="semaine-content">
+                    <div class="tache-mobile haute" data-priority="haute" data-responsable="Anthony">
                         <div class="tache-title">✍️ Script keynote - Finalisation</div>
-                        <div class="tache-detail">• Validation texte définitif avec intervenants<br>• Timing précis (objectif 45min + 15min Q&A)<br>• Points d'interactions audience<br>• Notes techniques régie</div>
-                        <span class="tache-duration">2 jours</span>
-                        <div class="dependance">Dépend de: Script S3</div>
+                        <div class="tache-details">
+                            <ul>
+                                <li>✅ Validation texte définitif avec intervenants</li>
+                                <li>⏰ Timing précis (objectif 45min + 15min Q&A)</li>
+                                <li>👥 Points d'interactions audience</li>
+                                <li>🎵 Notes techniques régie</li>
+                            </ul>
+                            <div class="dependance">🔗 Dépend de: Script S3</div>
+                        </div>
+                        <div class="tache-meta">
+                            <span class="tache-duration">⏱️ 2 jours</span>
+                            <span class="tache-responsable">✍️ Anthony</span>
+                        </div>
                     </div>
-                    <div class="tache priorite-haute">
+                    
+                    <div class="tache-mobile haute" data-priority="haute" data-responsable="Thibault">
                         <div class="tache-title">🎨 Habillage visuel final</div>
-                        <div class="tache-detail">• Template PowerPoint branded<br>• Habillage vidéos avec logo<br>• Écrans d'inter et de fin<br>• Cohérence charte graphique</div>
-                        <span class="tache-duration">2 jours</span>
+                        <div class="tache-details">
+                            <ul>
+                                <li>📊 Template PowerPoint branded</li>
+                                <li>🎬 Habillage vidéos avec logo</li>
+                                <li>📺 Écrans d'inter et de fin</li>
+                                <li>🎨 Cohérence charte graphique</li>
+                            </ul>
+                        </div>
+                        <div class="tache-meta">
+                            <span class="tache-duration">⏱️ 2 jours</span>
+                            <span class="tache-responsable">🎬 Thibault</span>
+                        </div>
                     </div>
-                    <div class="tache priorite-critique">
+                    
+                    <div class="tache-mobile critique" data-priority="critique">
+                        <div class="urgence-dot"></div>
                         <div class="tache-title">🔧 Test multimédia complet</div>
-                        <div class="tache-detail">• Test vidéos HD sur grand écran<br>• Vérification transitions audio/vidéo<br>• Test bande-son et niveaux<br>• Backup sur plusieurs supports</div>
-                        <span class="tache-duration">1 jour</span>
+                        <div class="tache-details">
+                            <ul>
+                                <li>📺 Test vidéos HD sur grand écran</li>
+                                <li>🔄 Vérification transitions audio/vidéo</li>
+                                <li>🎵 Test bande-son et niveaux</li>
+                                <li>💾 Backup sur plusieurs supports</li>
+                            </ul>
+                        </div>
+                        <div class="tache-meta">
+                            <span class="tache-duration">⏱️ 1 jour</span>
+                            <span class="tache-responsable">🔧 Technique</span>
+                        </div>
                     </div>
-                    <div class="tache priorite-moyenne">
+                    
+                    <div class="tache-mobile moyenne" data-priority="moyenne">
                         <div class="tache-title">📞 Relance partenaires</div>
-                        <div class="tache-detail">• Suivi des dossiers envoyés<br>• Relance téléphonique personnalisée<br>• Négociations tarifs si besoin<br>• Confirmation engagements</div>
-                        <span class="tache-duration">2 jours</span>
+                        <div class="tache-details">
+                            <ul>
+                                <li>📋 Suivi des dossiers envoyés</li>
+                                <li>☎️ Relance téléphonique personnalisée</li>
+                                <li>💰 Négociations tarifs si besoin</li>
+                                <li>✅ Confirmation engagements</li>
+                            </ul>
+                        </div>
+                        <div class="tache-meta">
+                            <span class="tache-duration">⏱️ 2 jours</span>
+                            <span class="tache-responsable">💼 Commercial</span>
+                        </div>
                     </div>
-                </td>
-                <td class="responsable">Anthony<br><br>Thibault<br><br>Technique<br><br>Commercial</td>
-                <td class="statut">2-3 jours</td>
-                <td class="statut statut-avenir">⏳ À VENIR</td>
-            </tr>
+                </div>
+            </div>
             
             <!-- SEMAINE 6 -->
-            <tr>
-                <td class="semaine">SEMAINE 6<br>29 sept-5 octobre<br><small>Production</small></td>
-                <td>
-                    <div class="tache priorite-critique">
+            <div class="semaine-card" data-semaine="6">
+                <div class="semaine-header" onclick="toggleSemaine(6)">
+                    <div>
+                        <div class="semaine-title">SEMAINE 6 • Production</div>
+                        <div class="semaine-dates">29 sept-5 octobre</div>
+                    </div>
+                    <div class="semaine-toggle">▼</div>
+                </div>
+                <div class="semaine-content">
+                    <div class="tache-mobile critique" data-priority="critique">
+                        <div class="urgence-dot"></div>
                         <div class="tache-title">🖨️ Impression finale supports</div>
-                        <div class="tache-detail">• Réception BAT définitifs<br>• Validation qualité impression<br>• Bâches 4x2m + Kakemonos 2x0.8m<br>• Photocall + 500 dépliants QR code</div>
-                        <span class="tache-duration">5 jours</span>
-                        <div class="dependance">Délai imprimeur</div>
+                        <div class="tache-details">
+                            <ul>
+                                <li>✅ Réception BAT définitifs</li>
+                                <li>🔍 Validation qualité impression</li>
+                                <li>🖼️ Bâches 4x2m + Kakemonos 2x0.8m</li>
+                                <li>📸 Photocall + 500 dépliants QR code</li>
+                            </ul>
+                            <div class="dependance">⏰ Délai imprimeur</div>
+                        </div>
+                        <div class="tache-meta">
+                            <span class="tache-duration">⏱️ 5 jours</span>
+                            <span class="tache-responsable">🏭 Production</span>
+                        </div>
                     </div>
-                    <div class="tache priorite-haute">
+                    
+                    <div class="tache-mobile haute" data-priority="haute">
                         <div class="tache-title">🔌 Coordination technique Madiana</div>
-                        <div class="tache-detail">• Visite technique avec prestataires<br>• Plan éclairage scène et salle<br>• Config son (micro-casque + retour)<br>• Installation écran géant + vidéoproj</div>
-                        <span class="tache-duration">2 jours</span>
+                        <div class="tache-details">
+                            <ul>
+                                <li>🏗️ Visite technique avec prestataires</li>
+                                <li>💡 Plan éclairage scène et salle</li>
+                                <li>🎤 Config son (micro-casque + retour)</li>
+                                <li>📺 Installation écran géant + vidéoproj</li>
+                            </ul>
+                        </div>
+                        <div class="tache-meta">
+                            <span class="tache-duration">⏱️ 2 jours</span>
+                            <span class="tache-responsable">🔧 Technique</span>
+                        </div>
                     </div>
-                    <div class="tache priorite-moyenne">
+                    
+                    <div class="tache-mobile moyenne" data-priority="moyenne">
                         <div class="tache-title">📧 Invitations - Dernier envoi</div>
-                        <div class="tache-detail">• Envoi aux retardataires<br>• Relance VIP et partenaires confirmés<br>• Suivi taux d'ouverture/réponse<br>• Ajustements liste selon capacité</div>
-                        <span class="tache-duration">1 jour</span>
+                        <div class="tache-details">
+                            <ul>
+                                <li>📤 Envoi aux retardataires</li>
+                                <li>⭐ Relance VIP et partenaires confirmés</li>
+                                <li>📊 Suivi taux d'ouverture/réponse</li>
+                                <li>⚖️ Ajustements liste selon capacité</li>
+                            </ul>
+                        </div>
+                        <div class="tache-meta">
+                            <span class="tache-duration">⏱️ 1 jour</span>
+                            <span class="tache-responsable">📱 Communication</span>
+                        </div>
                     </div>
-                </td>
-                <td class="responsable">Production<br><br>Technique<br><br>Communication</td>
-                <td class="statut">5 jours</td>
-                <td class="statut statut-avenir">⏳ À VENIR</td>
-            </tr>
+                </div>
+            </div>
             
             <!-- SEMAINE 7 -->
-            <tr>
-                <td class="semaine">SEMAINE 7<br>6-12 octobre<br><small>Finalisation</small></td>
-                <td>
-                    <div class="tache priorite-haute">
+            <div class="semaine-card" data-semaine="7">
+                <div class="semaine-header" onclick="toggleSemaine(7)">
+                    <div>
+                        <div class="semaine-title">SEMAINE 7 • Finalisation</div>
+                        <div class="semaine-dates">6-12 octobre</div>
+                    </div>
+                    <div class="semaine-toggle">▼</div>
+                </div>
+                <div class="semaine-content">
+                    <div class="tache-mobile haute" data-priority="haute">
                         <div class="tache-title">📦 Réception supports imprimés</div>
-                        <div class="tache-detail">• Contrôle qualité à réception<br>• Vérification quantités et couleurs<br>• Stockage sécurisé jusqu'à J-1<br>• Organisation transport vers Madiana</div>
-                        <span class="tache-duration">1 jour</span>
+                        <div class="tache-details">
+                            <ul>
+                                <li>🔍 Contrôle qualité à réception</li>
+                                <li>📊 Vérification quantités et couleurs</li>
+                                <li>🏪 Stockage sécurisé jusqu'à J-1</li>
+                                <li>🚚 Organisation transport vers Madiana</li>
+                            </ul>
+                        </div>
+                        <div class="tache-meta">
+                            <span class="tache-duration">⏱️ 1 jour</span>
+                            <span class="tache-responsable">📦 Logistique</span>
+                        </div>
                     </div>
-                    <div class="tache priorite-moyenne">
+                    
+                    <div class="tache-mobile moyenne" data-priority="moyenne">
                         <div class="tache-title">📰 Kit presse + communiqués</div>
-                        <div class="tache-detail">• Dossier de presse événement<br>• Communiqué avant/pendant/après<br>• Photos haute définition<br>• Contacts médias locaux</div>
-                        <span class="tache-duration">2 jours</span>
+                        <div class="tache-details">
+                            <ul>
+                                <li>📋 Dossier de presse événement</li>
+                                <li>📢 Communiqué avant/pendant/après</li>
+                                <li>📸 Photos haute définition</li>
+                                <li>📞 Contacts médias locaux</li>
+                            </ul>
+                        </div>
+                        <div class="tache-meta">
+                            <span class="tache-duration">⏱️ 2 jours</span>
+                            <span class="tache-responsable">📱 Communication</span>
+                        </div>
                     </div>
-                    <div class="tache priorite-critique">
+                    
+                    <div class="tache-mobile critique" data-priority="critique">
+                        <div class="urgence-dot"></div>
                         <div class="tache-title">🍽️ Logistique accueil & restauration</div>
-                        <div class="tache-detail">• Brief équipe hôtesses (4 personnes)<br>• Organisation cocktail/bar POP<br>• Vérification badges et check-in<br>• Plan de circulation invités</div>
-                        <span class="tache-duration">1 jour</span>
+                        <div class="tache-details">
+                            <ul>
+                                <li>👥 Brief équipe hôtesses (4 personnes)</li>
+                                <li>🍸 Organisation cocktail/bar POP</li>
+                                <li>🏷️ Vérification badges et check-in</li>
+                                <li>🗺️ Plan de circulation invités</li>
+                            </ul>
+                        </div>
+                        <div class="tache-meta">
+                            <span class="tache-duration">⏱️ 1 jour</span>
+                            <span class="tache-responsable">🎪 Event manager</span>
+                        </div>
                     </div>
-                    <div class="tache priorite-haute">
+                    
+                    <div class="tache-mobile haute" data-priority="haute">
                         <div class="tache-title">🎭 Répétition interne équipe</div>
-                        <div class="tache-detail">• Run-through complet présentation<br>• Test script + enchaînement vidéos<br>• Chronométrage précis<br>• Ajustements dernière minute</div>
-                        <span class="tache-duration">3h</span>
+                        <div class="tache-details">
+                            <ul>
+                                <li>🎬 Run-through complet présentation</li>
+                                <li>📋 Test script + enchaînement vidéos</li>
+                                <li>⏱️ Chronométrage précis</li>
+                                <li>🔧 Ajustements dernière minute</li>
+                            </ul>
+                        </div>
+                        <div class="tache-meta">
+                            <span class="tache-duration">⏱️ 3h</span>
+                            <span class="tache-responsable">🔧 Équipe tech</span>
+                        </div>
                     </div>
-                </td>
-                <td class="responsable">Logistique<br><br>Communication<br><br>Event manager<br><br>Équipe tech</td>
-                <td class="statut">2-3 jours</td>
-                <td class="statut statut-avenir">⏳ À VENIR</td>
-            </tr>
+                </div>
+            </div>
             
             <!-- SEMAINE 8 -->
-            <tr>
-                <td class="milestone">JALONS S8<br>13-19 octobre<br><small>Répétitions</small></td>
-                <td>
-                    <div class="tache priorite-critique">
+            <div class="semaine-card" data-semaine="8">
+                <div class="semaine-header" onclick="toggleSemaine(8)">
+                    <div>
+                        <div class="semaine-title">SEMAINE 8 • Répétitions</div>
+                        <div class="semaine-dates">13-19 octobre</div>
+                    </div>
+                    <div class="semaine-toggle">▼</div>
+                </div>
+                <div class="semaine-content">
+                    <div class="tache-mobile critique" data-priority="critique">
+                        <div class="urgence-dot"></div>
                         <div class="tache-title">🎪 Répétition générale à Madiana</div>
-                        <div class="tache-detail">• Date : Lundi 13 octobre 14h-18h<br>• Conditions réelles (éclairage/son)<br>• Test complet avec techniciens<br>• Réglage caméras et captation</div>
-                        <span class="tache-duration">4h</span>
+                        <div class="tache-details">
+                            <ul>
+                                <li>📅 Lundi 13 octobre 14h-18h</li>
+                                <li>💡 Conditions réelles (éclairage/son)</li>
+                                <li>🔧 Test complet avec techniciens</li>
+                                <li>🎥 Réglage caméras et captation</li>
+                            </ul>
+                        </div>
+                        <div class="tache-meta">
+                            <span class="tache-duration">⏱️ 4h</span>
+                            <span class="tache-responsable">👥 Équipe complète</span>
+                        </div>
                     </div>
-                    <div class="tache priorite-critique">
+                    
+                    <div class="tache-mobile critique" data-priority="critique">
+                        <div class="urgence-dot"></div>
                         <div class="tache-title">👥 Répétition avec intervenants</div>
-                        <div class="tache-detail">• Carine Bernard + Meghane Beuse<br>• Familiarisation avec la scène<br>• Test micro-casque et retour<br>• Validation enchainements</div>
-                        <span class="tache-duration">2h</span>
+                        <div class="tache-details">
+                            <ul>
+                                <li>🎤 Carine Bernard + Meghane Beuse</li>
+                                <li>🎭 Familiarisation avec la scène</li>
+                                <li>🎧 Test micro-casque et retour</li>
+                                <li>🔄 Validation enchaînements</li>
+                            </ul>
+                        </div>
+                        <div class="tache-meta">
+                            <span class="tache-duration">⏱️ 2h</span>
+                            <span class="tache-responsable">🎤 C. Bernard & M. Beuse</span>
+                        </div>
                     </div>
-                    <div class="tache priorite-haute">
+                    
+                    <div class="tache-mobile haute" data-priority="haute">
                         <div class="tache-title">⏱️ Ajustement timing keynote</div>
-                        <div class="tache-detail">• Chronométrage final précis<br>• Ajustement breaks et interactions<br>• Validation séquence Q&A<br>• Buffer temps pour imprévus</div>
-                        <span class="tache-duration">1h</span>
+                        <div class="tache-details">
+                            <ul>
+                                <li>⏰ Chronométrage final précis</li>
+                                <li>☕ Ajustement breaks et interactions</li>
+                                <li>❓ Validation séquence Q&A</li>
+                                <li>⚡ Buffer temps pour imprévus</li>
+                            </ul>
+                        </div>
+                        <div class="tache-meta">
+                            <span class="tache-duration">⏱️ 1h</span>
+                        </div>
                     </div>
-                    <div class="tache priorite-haute">
+                    
+                    <div class="tache-mobile haute" data-priority="haute">
                         <div class="tache-title">🤝 Réunion projet finale</div>
-                        <div class="tache-detail">• Date : Jeudi 15 octobre 14h-16h<br>• Checklist complète J-1<br>• Répartition rôles jour J<br>• Contacts urgence et backup</div>
-                        <span class="tache-duration">2h</span>
+                        <div class="tache-details">
+                            <ul>
+                                <li>📅 Jeudi 15 octobre 14h-16h</li>
+                                <li>✅ Checklist complète J-1</li>
+                                <li>👥 Répartition rôles jour J</li>
+                                <li>🆘 Contacts urgence et backup</li>
+                            </ul>
+                        </div>
+                        <div class="tache-meta">
+                            <span class="tache-duration">⏱️ 2h</span>
+                            <span class="tache-responsable">👔 Direction</span>
+                        </div>
                     </div>
-                </td>
-                <td class="responsable">Équipe complète<br><br>C. Bernard<br>M. Beuse<br><br>Direction</td>
-                <td class="statut">3 jours</td>
-                <td class="statut statut-avenir">⏳ À VENIR</td>
-            </tr>
+                </div>
+            </div>
             
             <!-- JOUR J -->
-            <tr>
-                <td class="jour-j">JOUR J<br>16 OCTOBRE<br><small>Événement</small></td>
-                <td>
-                    <div class="tache priorite-critique">
+            <div class="semaine-card jour-j" id="jour-j" data-semaine="9">
+                <div class="semaine-header" onclick="toggleSemaine(9)">
+                    <div>
+                        <div class="semaine-title">🎯 JOUR J • 16 OCTOBRE</div>
+                        <div class="semaine-dates">Événement Fallon</div>
+                    </div>
+                    <div class="semaine-toggle">▼</div>
+                </div>
+                <div class="semaine-content">
+                    <div class="tache-mobile critique" data-priority="critique">
+                        <div class="urgence-dot"></div>
                         <div class="tache-title">🏗️ Installation scénographie</div>
-                        <div class="tache-detail">• Arrivée équipe 7h00<br>• Installation bâches fond de scène<br>• Placement kakemonos et photocall<br>• Test final son/lumière/vidéo</div>
-                        <span class="tache-duration">7h-10h</span>
+                        <div class="tache-details">
+                            <ul>
+                                <li>🕖 Arrivée équipe 7h00</li>
+                                <li>🖼️ Installation bâches fond de scène</li>
+                                <li>📏 Placement kakemonos et photocall</li>
+                                <li>🔧 Test final son/lumière/vidéo</li>
+                            </ul>
+                        </div>
+                        <div class="tache-meta">
+                            <span class="tache-duration">🕖 7h-10h</span>
+                            <span class="tache-responsable">🔧 Technique</span>
+                        </div>
                     </div>
-                    <div class="tache priorite-haute">
+                    
+                    <div class="tache-mobile haute" data-priority="haute">
                         <div class="tache-title">👥 Brief équipes</div>
-                        <div class="tache-detail">• 10h00 : Brief hôtesses accueil<br>• 10h30 : Brief techniciens régie<br>• Vérification matériel scan QR<br>• Test dernier système inscription</div>
-                        <span class="tache-duration">10h-11h</span>
+                        <div class="tache-details">
+                            <ul>
+                                <li>🕙 10h00 : Brief hôtesses accueil</li>
+                                <li>🕥 10h30 : Brief techniciens régie</li>
+                                <li>📱 Vérification matériel scan QR</li>
+                                <li>🧪 Test dernier système inscription</li>
+                            </ul>
+                        </div>
+                        <div class="tache-meta">
+                            <span class="tache-duration">🕙 10h-11h</span>
+                            <span class="tache-responsable">🎪 Event manager</span>
+                        </div>
                     </div>
-                    <div class="tache priorite-critique">
+                    
+                    <div class="tache-mobile critique" data-priority="critique">
+                        <div class="urgence-dot"></div>
                         <div class="tache-title">🎫 Accueil & contrôle entrée</div>
-                        <div class="tache-detail">• Ouverture 14h00<br>• Scan QR code + remise badge<br>• Accueil VIP et partenaires<br>• Gestion liste d'attente</div>
-                        <span class="tache-duration">14h-15h</span>
+                        <div class="tache-details">
+                            <ul>
+                                <li>🕑 Ouverture 14h00</li>
+                                <li>📱 Scan QR code + remise badge</li>
+                                <li>⭐ Accueil VIP et partenaires</li>
+                                <li>📋 Gestion liste d'attente</li>
+                            </ul>
+                        </div>
+                        <div class="tache-meta">
+                            <span class="tache-duration">🕑 14h-15h</span>
+                            <span class="tache-responsable">👥 Hôtesses</span>
+                        </div>
                     </div>
-                    <div class="tache priorite-critique">
+                    
+                    <div class="tache-mobile critique" data-priority="critique">
+                        <div class="urgence-dot"></div>
                         <div class="tache-title">🎤 KEYNOTE FALLON</div>
-                        <div class="tache-detail">• 15h00-16h00 : Présentation principale<br>• Carine Bernard & Meghane Beuse<br>• Support vidéo et animations<br>• 16h00-16h15 : Session Q&A</div>
-                        <span class="tache-duration">15h-16h15</span>
+                        <div class="tache-details">
+                            <ul>
+                                <li>🕒 15h00-16h00 : Présentation principale</li>
+                                <li>👩‍💼 Carine Bernard & Meghane Beuse</li>
+                                <li>🎬 Support vidéo et animations</li>
+                                <li>❓ 16h00-16h15 : Session Q&A</li>
+                            </ul>
+                        </div>
+                        <div class="tache-meta">
+                            <span class="tache-duration">🕒 15h-16h15</span>
+                            <span class="tache-responsable">🎤 C. Bernard & M. Beuse</span>
+                        </div>
                     </div>
-                    <div class="tache priorite-moyenne">
+                    
+                    <div class="tache-mobile moyenne" data-priority="moyenne">
                         <div class="tache-title">🍸 Bar POP + Networking</div>
-                        <div class="tache-detail">• 16h15-18h30 : Cocktail networking<br>• Animation bar à thème<br>• Échanges libres avec intervenants<br>• Prises de photos photocall</div>
-                        <span class="tache-duration">16h15-18h30</span>
+                        <div class="tache-details">
+                            <ul>
+                                <li>🕓 16h15-18h30 : Cocktail networking</li>
+                                <li>🍹 Animation bar à thème</li>
+                                <li>🤝 Échanges libres avec intervenants</li>
+                                <li>📸 Prises de photos photocall</li>
+                            </ul>
+                        </div>
+                        <div class="tache-meta">
+                            <span class="tache-duration">🕓 16h15-18h30</span>
+                            <span class="tache-responsable">🍸 Bar</span>
+                        </div>
                     </div>
-                    <div class="tache priorite-normale">
+                    
+                    <div class="tache-mobile normale" data-priority="normale">
                         <div class="tache-title">📸 Captation & diffusion</div>
-                        <div class="tache-detail">• Photos événement haute qualité<br>• Extraits vidéo pour réseaux sociaux<br>• Live tweets moments clés<br>• Collecte témoignages participants</div>
-                        <span class="tache-duration">14h-18h30</span>
+                        <div class="tache-details">
+                            <ul>
+                                <li>📷 Photos événement haute qualité</li>
+                                <li>🎬 Extraits vidéo pour réseaux sociaux</li>
+                                <li>🐦 Live tweets moments clés</li>
+                                <li>🎤 Collecte témoignages participants</li>
+                            </ul>
+                        </div>
+                        <div class="tache-meta">
+                            <span class="tache-duration">🕑 14h-18h30</span>
+                            <span class="tache-responsable">📱 Communication</span>
+                        </div>
                     </div>
-                </td>
-                <td class="responsable">Équipe complète<br><br>C. Bernard<br>M. Beuse<br><br>Communication<br><br>Technique</td>
-                <td class="statut">Toute la journée</td>
-                <td class="statut statut-jourj">🎯 JOUR J</td>
-            </tr>
+                </div>
+            </div>
+        </div>
+        
+        <!-- LÉGENDE MOBILE -->
+        <div class="legende-mobile">
+            <div class="legende-title">🎨 Code couleur des priorités</div>
+            <div class="legende-items">
+                <div class="legende-item">
+                    <div class="legende-color" style="background: #dc2626;"></div>
+                    <span>🔥 Critique</span>
+                </div>
+                <div class="legende-item">
+                    <div class="legende-color" style="background: #f59e0b;"></div>
+                    <span>⚠️ Haute</span>
+                </div>
+                <div class="legende-item">
+                    <div class="legende-color" style="background: #3b82f6;"></div>
+                    <span>📋 Moyenne</span>
+                </div>
+                <div class="legende-item">
+                    <div class="legende-color" style="background: #10b981;"></div>
+                    <span>✅ Normale</span>
+                </div>
+            </div>
+        </div>
+        
+        <!-- CONTACTS RAPIDES -->
+        <div class="legende-mobile" style="margin-top: 15px;">
+            <div class="legende-title">📞 Contacts urgence</div>
+            <div style="display: grid; grid-template-columns: 1fr; gap: 8px; font-size: 12px;">
+                <div style="display: flex; justify-content: space-between; align-items: center; padding: 8px; background: #f8f9fa; border-radius: 8px;">
+                    <span>✍️ Anthony (Script)</span>
+                    <span style="color: #667eea; font-weight: 600;">📱 Contact</span>
+                </div>
+                <div style="display: flex; justify-content: space-between; align-items: center; padding: 8px; background: #f8f9fa; border-radius: 8px;">
+                    <span>🎬 Thibault (Vidéos)</span>
+                    <span style="color: #667eea; font-weight: 600;">📱 Contact</span>
+                </div>
+                <div style="display: flex; justify-content: space-between; align-items: center; padding: 8px; background: #f8f9fa; border-radius: 8px;">
+                    <span>🏢 Madiana (Lieu)</span>
+                    <span style="color: #667eea; font-weight: 600;">📱 Contact</span>
+                </div>
+                <div style="display: flex; justify-content: space-between; align-items: center; padding: 8px; background: #f8f9fa; border-radius: 8px;">
+                    <span>🎤 C. Bernard & M. Beuse</span>
+                    <span style="color: #667eea; font-weight: 600;">📱 Contact</span>
+                </div>
+            </div>
+        </div>
+        
+        <!-- FLOATING ACTION BUTTON -->
+        <button class="fab" onclick="jumpToJourJ()" title="Aller au Jour J">
+            🎯
+        </button>
+    </div>
+    
+    <script>
+        // GESTION DES SEMAINES PLIABLES
+        function toggleSemaine(num) {
+            const card = document.querySelector(`[data-semaine="${num}"]`);
+            const content = card.querySelector('.semaine-content');
+            const toggle = card.querySelector('.semaine-toggle');
             
-            <!-- POST-ÉVÉNEMENT -->
-            <tr>
-                <td class="milestone">POST-EVENT<br>17-19 octobre<br><small>Suivi</small></td>
-                <td>
-                    <div class="tache priorite-haute">
-                        <div class="tache-title">📊 Bilan et analyse</div>
-                        <div class="tache-detail">• Comptage participants final<br>• Analyse satisfaction (sondage express)<br>• ROI partenaires et sponsors<br>• Retours équipe et intervenants</div>
-                        <span class="tache-duration">J+1</span>
-                    </div>
-                    <div class="tache priorite-moyenne">
-                        <div class="tache-title">📧 Suivi participants</div>
-                        <div class="tache-detail">• Mail de remerciement personnalisé<br>• Envoi photos et supports présentation<br>• Questionnaire de satisfaction<br>• Proposition rendez-vous commerciaux</div>
-                        <span class="tache-duration">J+2</span>
-                    </div>
-                    <div class="tache priorite-normale">
-                        <div class="tache-title">📋 Rapport final projet</div>
-                        <div class="tache-detail">• Bilan financier complet<br>• Analyse des objectifs atteints<br>• Recommandations pour futurs événements<br>• Archivage documents et médias</div>
-                        <span class="tache-duration">J+3</span>
-                    </div>
-                </td>
-                <td class="responsable">Direction<br><br>Marketing<br><br>Chef de projet</td>
-                <td class="statut">3 jours</td>
-                <td class="statut statut-avenir">⏳ SUIVI</td>
-            </tr>
-        </tbody>
-    </table>
-    
-    <div class="legende">
-        <h4>📌 Légende des priorités et codes couleur</h4>
-        <div class="legende-grid">
-            <div class="legende-item">
-                <div class="legende-color" style="background: #e74c3c;"></div>
-                <span>Critique - Bloquant pour la suite</span>
-            </div>
-            <div class="legende-item">
-                <div class="legende-color" style="background: #f39c12;"></div>
-                <span>Haute - Important pour la qualité</span>
-            </div>
-            <div class="legende-item">
-                <div class="legende-color" style="background: #3498db;"></div>
-                <span>Moyenne - Amélioration expérience</span>
-            </div>
-            <div class="legende-item">
-                <div class="legende-color" style="background: #27ae60;"></div>
-                <span>Normale - Confort et finition</span>
-            </div>
-            <div class="legende-item">
-                <div class="legende-color" style="background: #8e44ad;"></div>
-                <span>Jalon - Point de validation clé</span>
-            </div>
-            <div class="legende-item">
-                <div class="legende-color" style="background: #34495e;"></div>
-                <span>Jour J - Exécution événement</span>
-            </div>
-        </div>
-    </div>
-    
-    <div class="resume" style="margin-top: 20px;">
-        <h4>⚠️ Points d'attention et risques identifiés</h4>
-        <div style="background: #fff3cd; padding: 15px; border-radius: 8px; margin-top: 10px;">
-            <strong>🔥 Risques critiques :</strong>
-            <ul style="margin: 10px 0; padding-left: 20px;">
-                <li><strong>Délais impression</strong> : 15 jours minimum requis - commande impérative avant 25 septembre</li>
-                <li><strong>Disponibilité Madiana</strong> : Confirmation technique urgente (son/éclairage/écran)</li>
-                <li><strong>Intervenants</strong> : Planning Carine Bernard et Meghane Beuse à sécuriser rapidement</li>
-                <li><strong>Budget partenaires</strong> : Objectif revenus à définir et valider d'ici fin août</li>
-            </ul>
-        </div>
+            if (content.classList.contains('active')) {
+                content.classList.remove('active');
+                card.classList.add('collapsed');
+            } else {
+                content.classList.add('active');
+                card.classList.remove('collapsed');
+            }
+        }
         
-        <div style="background: #d1ecf1; padding: 15px; border-radius: 8px; margin-top: 15px;">
-            <strong>📋 Actions immédiates (Semaine 1) :</strong>
-            <ul style="margin: 10px 0; padding-left: 20px;">
-                <li>Organiser réunion lancement jeudi 28 août 14h</li>
-                <li>Contacter Madiana pour visite technique</li>
-                <li>Définir budget global et objectifs financiers</li>
-                <li>Commencer rédaction dossier partenaire</li>
-                <li>Identifier et contacter designer pour identité visuelle</li>
-            </ul>
-        </div>
+        // NAVIGATION RAPIDE
+        function showAll() {
+            const taches = document.querySelectorAll('.tache-mobile');
+            const semaines = document.querySelectorAll('.semaine-card');
+            
+            taches.forEach(t => {
+                t.style.display = 'block';
+                t.style.visibility = 'visible';
+            });
+            semaines.forEach(s => {
+                s.style.display = 'block';
+                s.style.visibility = 'visible';
+            });
+            
+            // Ouvrir toutes les sections
+            semaines.forEach(s => {
+                const content = s.querySelector('.semaine-content');
+                if (content && !content.classList.contains('active')) {
+                    content.classList.add('active');
+                    s.classList.remove('collapsed');
+                }
+            });
+        }
         
-        <div style="background: #d4edda; padding: 15px; border-radius: 8px; margin-top: 15px;">
-            <strong>🎯 Objectifs mesurables :</strong>
-            <ul style="margin: 10px 0; padding-left: 20px;">
-                <li><strong>Participants</strong> : 150-200 personnes (objectif optimal 175)</li>
-                <li><strong>Partenaires</strong> : 8-12 sponsors avec contributions financières</li>
-                <li><strong>Médias</strong> : 5+ retombées presse locale et spécialisée</li>
-                <li><strong>Satisfaction</strong> : >85% participants satisfaits ou très satisfaits</li>
-                <li><strong>ROI</strong> : Équilibrer budget avec revenus partenariats</li>
-            </ul>
-        </div>
-    </div>
+        function filterByPriority(priority) {
+            console.log('Filtrage par priorité:', priority);
+            const taches = document.querySelectorAll('.tache-mobile');
+            const semaines = document.querySelectorAll('.semaine-card');
+            
+            // Masquer toutes les tâches d'abord
+            taches.forEach(t => {
+                t.style.display = 'none';
+                t.style.visibility = 'hidden';
+            });
+            
+            // Afficher seulement les tâches de la priorité demandée
+            const targetTasks = document.querySelectorAll(`[data-priority="${priority}"]`);
+            console.log('Tâches trouvées:', targetTasks.length);
+            
+            targetTasks.forEach(t => {
+                t.style.display = 'block';
+                t.style.visibility = 'visible';
+            });
+            
+            // Gérer l'affichage des semaines et ouvrir celles qui ont des tâches visibles
+            semaines.forEach(s => {
+                const visibleTasks = s.querySelectorAll(`[data-priority="${priority}"]`);
+                if (visibleTasks.length > 0) {
+                    s.style.display = 'block';
+                    s.style.visibility = 'visible';
+                    // Ouvrir automatiquement la section
+                    const content = s.querySelector('.semaine-content');
+                    if (content && !content.classList.contains('active')) {
+                        content.classList.add('active');
+                        s.classList.remove('collapsed');
+                    }
+                } else {
+                    s.style.display = 'none';
+                    s.style.visibility = 'hidden';
+                }
+            });
+        }
+        
+        function filterByResponsable(responsable) {
+            console.log('Filtrage par responsable:', responsable);
+            const taches = document.querySelectorAll('.tache-mobile');
+            const semaines = document.querySelectorAll('.semaine-card');
+            
+            // Masquer toutes les tâches d'abord
+            taches.forEach(t => {
+                t.style.display = 'none';
+                t.style.visibility = 'hidden';
+            });
+            
+            // Afficher les tâches du responsable
+            const targetTasks = document.querySelectorAll(`[data-responsable*="${responsable}"]`);
+            console.log('Tâches trouvées pour', responsable, ':', targetTasks.length);
+            
+            targetTasks.forEach(t => {
+                t.style.display = 'block';
+                t.style.visibility = 'visible';
+            });
+            
+            // Gérer l'affichage des semaines
+            semaines.forEach(s => {
+                const visibleTasks = s.querySelectorAll(`[data-responsable*="${responsable}"]`);
+                if (visibleTasks.length > 0) {
+                    s.style.display = 'block';
+                    s.style.visibility = 'visible';
+                    // Ouvrir automatiquement la section
+                    const content = s.querySelector('.semaine-content');
+                    if (content && !content.classList.contains('active')) {
+                        content.classList.add('active');
+                        s.classList.remove('collapsed');
+                    }
+                } else {
+                    s.style.display = 'none';
+                    s.style.visibility = 'hidden';
+                }
+            });
+        }
+        
+        function jumpToJourJ() {
+            // D'abord afficher tout
+            showAll();
+            
+            // Puis scroller vers le Jour J
+            setTimeout(() => {
+                const jourJ = document.getElementById('jour-j');
+                if (jourJ) {
+                    jourJ.scrollIntoView({ 
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                    
+                    // Ouvrir automatiquement la section Jour J
+                    const jourJContent = jourJ.querySelector('.semaine-content');
+                    if (jourJContent && !jourJContent.classList.contains('active')) {
+                        toggleSemaine(9);
+                    }
+                }
+            }, 100);
+        }
+        
+        function updateActiveButton(clickedButton) {
+            document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
+            if (clickedButton) {
+                clickedButton.classList.add('active');
+            }
+        }
+        
+        // RECHERCHE CORRIGÉE
+        document.addEventListener('DOMContentLoaded', function() {
+            const searchInput = document.getElementById('searchInput');
+            if (searchInput) {
+                searchInput.addEventListener('input', function(e) {
+                    const searchTerm = e.target.value.toLowerCase().trim();
+                    console.log('Recherche:', searchTerm);
+                    
+                    const taches = document.querySelectorAll('.tache-mobile');
+                    const semaines = document.querySelectorAll('.semaine-card');
+                    
+                    if (searchTerm === '') {
+                        // Réinitialiser l'affichage
+                        showAll();
+                        return;
+                    }
+                    
+                    // Masquer toutes les tâches d'abord
+                    taches.forEach(tache => {
+                        tache.style.display = 'none';
+                        tache.style.visibility = 'hidden';
+                    });
+                    
+                    // Rechercher dans les tâches
+                    let foundTasks = 0;
+                    taches.forEach(tache => {
+                        const titleEl = tache.querySelector('.tache-title');
+                        const detailsEl = tache.querySelector('.tache-details');
+                        
+                        if (titleEl && detailsEl) {
+                            const title = titleEl.textContent.toLowerCase();
+                            const details = detailsEl.textContent.toLowerCase();
+                            
+                            if (title.includes(searchTerm) || details.includes(searchTerm)) {
+                                tache.style.display = 'block';
+                                tache.style.visibility = 'visible';
+                                foundTasks++;
+                            }
+                        }
+                    });
+                    
+                    console.log('Tâches trouvées:', foundTasks);
+                    
+                    // Gérer l'affichage des semaines
+                    semaines.forEach(s => {
+                        const visibleTasks = Array.from(s.querySelectorAll('.tache-mobile')).filter(t => 
+                            t.style.display === 'block' || t.style.visibility === 'visible'
+                        );
+                        
+                        if (visibleTasks.length > 0) {
+                            s.style.display = 'block';
+                            s.style.visibility = 'visible';
+                            // Ouvrir automatiquement la section
+                            const content = s.querySelector('.semaine-content');
+                            if (content && !content.classList.contains('active')) {
+                                content.classList.add('active');
+                                s.classList.remove('collapsed');
+                            }
+                        } else {
+                            s.style.display = 'none';
+                            s.style.visibility = 'hidden';
+                        }
+                    });
+                });
+            }
+        });
+        
+        // MISE À JOUR AUTOMATIQUE DE LA PROGRESSION
+        function updateProgress() {
+            const now = new Date();
+            const startDate = new Date('2025-08-25');
+            const endDate = new Date('2025-10-16');
+            
+            const totalDays = (endDate - startDate) / (1000 * 60 * 60 * 24);
+            const elapsedDays = (now - startDate) / (1000 * 60 * 60 * 24);
+            const progressPercent = Math.max(0, Math.min(100, (elapsedDays / totalDays) * 100));
+            
+            document.querySelector('.progress-fill').style.width = progressPercent + '%';
+            
+            // Déterminer la semaine actuelle
+            const currentWeek = Math.ceil(elapsedDays / 7);
+            const phases = [
+                'Phase lancement', 'Phase partenaires', 'Phase validation créa', 
+                'Phase invitations', 'Phase finalisation', 'Phase production',
+                'Phase finalisation', 'Phase répétitions', 'JOUR J!'
+            ];
+            
+            const currentPhase = phases[Math.min(currentWeek - 1, phases.length - 1)] || 'Phase lancement';
+            document.querySelector('.progress-text').textContent = 
+                `Semaine ${Math.min(currentWeek, 8)}/8 • ${currentPhase}`;
+        }
+        
+        // INITIALISATION
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('Initialisation du planning...');
+            
+            updateProgress();
+            
+            // Ouvrir la première semaine par défaut
+            setTimeout(() => {
+                const firstSemaine = document.querySelector('[data-semaine="1"] .semaine-content');
+                if (firstSemaine && !firstSemaine.classList.contains('active')) {
+                    toggleSemaine(1);
+                }
+            }, 500);
+            
+            // Mettre à jour la progression chaque heure
+            setInterval(updateProgress, 3600000);
+            
+            // Test des filtres au chargement
+            console.log('Nombre de tâches:', document.querySelectorAll('.tache-mobile').length);
+            console.log('Tâches critiques:', document.querySelectorAll('[data-priority="critique"]').length);
+            console.log('Tâches Anthony:', document.querySelectorAll('[data-responsable*="Anthony"]').length);
+            console.log('Tâches Thibault:', document.querySelectorAll('[data-responsable*="Thibault"]').length);
+            
+            // Gestion du swipe pour navigation mobile
+            let startY = null;
+            let currentSemaine = 1;
+            
+            document.addEventListener('touchstart', function(e) {
+                startY = e.touches[0].clientY;
+            });
+            
+            document.addEventListener('touchend', function(e) {
+                if (!startY) return;
+                
+                const endY = e.changedTouches[0].clientY;
+                const diffY = startY - endY;
+                
+                // Swipe up - semaine suivante
+                if (diffY > 50 && currentSemaine < 9) {
+                    currentSemaine++;
+                    const targetSemaine = document.querySelector(`[data-semaine="${currentSemaine}"]`);
+                    if (targetSemaine) {
+                        targetSemaine.scrollIntoView({
+                            behavior: 'smooth',
+                            block: 'start'
+                        });
+                    }
+                }
+                // Swipe down - semaine précédente  
+                else if (diffY < -50 && currentSemaine > 1) {
+                    currentSemaine--;
+                    const targetSemaine = document.querySelector(`[data-semaine="${currentSemaine}"]`);
+                    if (targetSemaine) {
+                        targetSemaine.scrollIntoView({
+                            behavior: 'smooth',
+                            block: 'start'
+                        });
+                    }
+                }
+                
+                startY = null;
+            });
+            
+            // Auto-scroll vers la semaine en cours (après 2 secondes)
+            setTimeout(() => {
+                const now = new Date();
+                const startDate = new Date('2025-08-25');
+                const elapsedDays = (now - startDate) / (1000 * 60 * 60 * 24);
+                const currentWeekNum = Math.max(1, Math.min(9, Math.ceil(elapsedDays / 7)));
+                
+                if (currentWeekNum > 1) {
+                    const targetSemaine = document.querySelector(`[data-semaine="${currentWeekNum}"]`);
+                    if (targetSemaine) {
+                        targetSemaine.scrollIntoView({
+                            behavior: 'smooth',
+                            block: 'start'
+                        });
+                        currentSemaine = currentWeekNum;
+                    }
+                }
+            }, 2000);
+            
+            // Ajouter gestionnaire de recherche
+            const searchInput = document.getElementById('searchInput');
+            if (searchInput) {
+                console.log('Input de recherche trouvé');
+                searchInput.addEventListener('input', function(e) {
+                    const searchTerm = e.target.value.toLowerCase().trim();
+                    console.log('Recherche:', searchTerm);
+                    
+                    const taches = document.querySelectorAll('.tache-mobile');
+                    const semaines = document.querySelectorAll('.semaine-card');
+                    
+                    if (searchTerm === '') {
+                        // Réinitialiser l'affichage
+                        showAll();
+                        return;
+                    }
+                    
+                    // Masquer toutes les tâches d'abord
+                    taches.forEach(tache => {
+                        tache.style.display = 'none';
+                        tache.style.visibility = 'hidden';
+                    });
+                    
+                    // Rechercher dans les tâches
+                    let foundTasks = 0;
+                    taches.forEach(tache => {
+                        const titleEl = tache.querySelector('.tache-title');
+                        const detailsEl = tache.querySelector('.tache-details');
+                        
+                        if (titleEl && detailsEl) {
+                            const title = titleEl.textContent.toLowerCase();
+                            const details = detailsEl.textContent.toLowerCase();
+                            
+                            if (title.includes(searchTerm) || details.includes(searchTerm)) {
+                                tache.style.display = 'block';
+                                tache.style.visibility = 'visible';
+                                foundTasks++;
+                            }
+                        }
+                    });
+                    
+                    console.log('Tâches trouvées:', foundTasks);
+                    
+                    // Gérer l'affichage des semaines
+                    semaines.forEach(s => {
+                        const visibleTasks = Array.from(s.querySelectorAll('.tache-mobile')).filter(t => 
+                            t.style.display === 'block' && t.style.visibility !== 'hidden'
+                        );
+                        
+                        if (visibleTasks.length > 0) {
+                            s.style.display = 'block';
+                            s.style.visibility = 'visible';
+                            // Ouvrir automatiquement la section
+                            const content = s.querySelector('.semaine-content');
+                            if (content && !content.classList.contains('active')) {
+                                content.classList.add('active');
+                                s.classList.remove('collapsed');
+                            }
+                        } else {
+                            s.style.display = 'none';
+                            s.style.visibility = 'hidden';
+                        }
+                    });
+                });
+            } else {
+                console.error('Input de recherche non trouvé!');
+            }
+        });
+        
+        // SERVICE WORKER POUR MODE OFFLINE (optionnel)
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', function() {
+                const swScript = `
+                    const CACHE_NAME = 'fallon-planning-v1';
+                    const urlsToCache = ['/'];
+                    
+                    self.addEventListener('install', function(event) {
+                        event.waitUntil(
+                            caches.open(CACHE_NAME)
+                                .then(function(cache) {
+                                    return cache.addAll(urlsToCache);
+                                })
+                        );
+                    });
+                    
+                    self.addEventListener('fetch', function(event) {
+                        event.respondWith(
+                            caches.match(event.request)
+                                .then(function(response) {
+                                    return response || fetch(event.request);
+                                })
+                        );
+                    });
+                `;
+                
+                const blob = new Blob([swScript], { type: 'application/javascript' });
+                const swUrl = URL.createObjectURL(blob);
+                
+                navigator.serviceWorker.register(swUrl)
+                    .then(function(registration) {
+                        console.log('SW registered');
+                    })
+                    .catch(function(error) {
+                        console.log('SW registration failed');
+                    });
+            });
+        }
+        
+        // NOTIFICATIONS PUSH (si supportées)
+        function setupNotifications() {
+            if ('Notification' in window && navigator.serviceWorker) {
+                Notification.requestPermission().then(function(permission) {
+                    if (permission === 'granted') {
+                        // Programmer des rappels pour les tâches critiques
+                        const criticalDates = [
+                            { date: '2025-08-28', message: '🎯 Réunion de lancement aujourd\'hui à 14h!' },
+                            { date: '2025-09-25', message: '🖨️ Deadline impression - Valider les BAT aujourd\'hui!' },
+                            { date: '2025-10-13', message: '🎪 Répétition générale à Madiana aujourd\'hui!' },
+                            { date: '2025-10-16', message: '🎯 JOUR J - Événement Fallon aujourd\'hui!' }
+                        ];
+                        
+                        criticalDates.forEach(item => {
+                            const targetDate = new Date(item.date);
+                            const now = new Date();
+                            const timeDiff = targetDate - now;
+                            
+                            if (timeDiff > 0 && timeDiff < 24 * 60 * 60 * 1000) { // Dans les 24h
+                                setTimeout(() => {
+                                    new Notification('📋 Planning Fallon', {
+                                        body: item.message,
+                                        icon: 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg"><text y="32" font-size="32">📋</text></svg>',
+                                        tag: 'fallon-reminder'
+                                    });
+                                }, timeDiff - (2 * 60 * 60 * 1000)); // 2h avant
+                            }
+                        });
+                    }
+                });
+            }
+        }
+        
+        // Activer les notifications après 5 secondes
+        setTimeout(setupNotifications, 5000);
+        
+        // EXPORT PDF (simulation - nécessiterait une vraie lib comme jsPDF)
+        function exportToPDF() {
+            // Simulation d'export PDF
+            const printWindow = window.open('', '_blank');
+            const printContent = `
+                <html>
+                <head>
+                    <title>Rétro-planning Fallon - Export PDF</title>
+                    <style>
+                        body { font-family: Arial, sans-serif; font-size: 12px; }
+                        .header { background: #667eea; color: white; padding: 20px; text-align: center; }
+                        .semaine { margin: 20px 0; border: 1px solid #ddd; }
+                        .semaine-title { background: #f8f9fa; padding: 10px; font-weight: bold; }
+                        .tache { margin: 10px; padding: 10px; border-left: 4px solid #667eea; }
+                        .critique { border-left-color: #dc3545; }
+                        .haute { border-left-color: #ffc107; }
+                        @media print { body { margin: 0; } }
+                    </style>
+                </head>
+                <body>
+                    <div class="header">
+                        <h1>📋 RÉTRO-PLANNING ÉVÉNEMENT FALLON</h1>
+                        <p>📍 Madiana, Martinique • 📅 16 octobre 2025</p>
+                    </div>
+                    ${document.getElementById('semaines-container').innerHTML}
+                </body>
+                </html>
+            `;
+            
+            printWindow.document.write(printContent);
+            printWindow.document.close();
+            printWindow.print();
+        }
+        
+        // PARTAGE NATIF (si supporté)
+        function shareSchedule() {
+            if (navigator.share) {
+                navigator.share({
+                    title: '📋 Planning Fallon - Madiana 2025',
+                    text: 'Découvrez le rétro-planning détaillé de l\'événement Fallon du 16 octobre 2025',
+                    url: window.location.href
+                }).catch(console.error);
+            } else {
+                // Fallback - copier l'URL
+                navigator.clipboard.writeText(window.location.href).then(() => {
+                    alert('🔗 Lien copié dans le presse-papier!');
+                });
+            }
+        }
+        
+        // AJOUTER LES FONCTIONS AU FAB (au clic long)
+        let fabTimeout;
+        document.querySelector('.fab').addEventListener('touchstart', function() {
+            fabTimeout = setTimeout(() => {
+                const actions = confirm('Actions disponibles:\n\n📤 Partager le planning\n🖨️ Exporter en PDF\n\nAppuyez sur OK pour partager, Annuler pour exporter PDF');
+                if (actions) {
+                    shareSchedule();
+                } else {
+                    exportToPDF();
+                }
+            }, 1000);
+        });
+        
+        document.querySelector('.fab').addEventListener('touchend', function() {
+            clearTimeout(fabTimeout);
+        });
+        
+        // MODE SOMBRE AUTOMATIQUE
+        function toggleDarkMode() {
+            document.body.classList.toggle('dark-mode');
+            localStorage.setItem('darkMode', document.body.classList.contains('dark-mode'));
+        }
+        
+        // Charger la préférence de mode sombre
+        if (localStorage.getItem('darkMode') === 'true') {
+            document.body.classList.add('dark-mode');
+        }
+        
+        // STATISTIQUES TEMPS RÉEL
+        function updateStats() {
+            const totalTasks = document.querySelectorAll('.tache-mobile').length;
+            const criticalTasks = document.querySelectorAll('[data-priority="critique"]').length;
+            const completedWeeks = Math.floor((new Date() - new Date('2025-08-25')) / (7 * 24 * 60 * 60 * 1000));
+            
+            // Mettre à jour les stats dans le header si nécessaire
+            const stats = document.querySelectorAll('.stat-number');
+            if (stats.length >= 4) {
+                stats[2].textContent = totalTasks;
+                // stats[3] pourrait afficher les tâches critiques
+            }
+        }
+        
+        // Mettre à jour les stats toutes les heures
+        setInterval(updateStats, 3600000);
+        updateStats(); // Appel initial
+    </script>
     
-    <div style="text-align: center; margin-top: 30px; padding: 20px; background: white; border-radius: 10px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
-        <h4>📞 Contacts d'urgence projet</h4>
-        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-top: 15px;">
-            <div>
-                <strong>🎯 Chef de projet</strong><br>
-                <small>Coordination générale</small>
-            </div>
-            <div>
-                <strong>🎨 Anthony</strong><br>
-                <small>Script & contenu</small>
-            </div>
-            <div>
-                <strong>🎬 Thibault</strong><br>
-                <small>Visuels & vidéos</small>
-            </div>
-            <div>
-                <strong>🎤 Intervenants</strong><br>
-                <small>C. Bernard & M. Beuse</small>
-            </div>
-            <div>
-                <strong>🏢 Madiana</strong><br>
-                <small>Technique & logistique</small>
-            </div>
-            <div>
-                <strong>🖨️ Imprimeur</strong><br>
-                <small>Production supports</small>
-            </div>
-        </div>
-    </div>
+    <style>
+        /* STYLES ADDITIONNELS POUR FONCTIONNALITÉS AVANCÉES */
+        
+        /* Mode sombre simplifié */
+        @media (prefers-color-scheme: dark) {
+            body {
+                background: #111827 !important;
+                color: #f9fafb !important;
+            }
+            
+            .semaine-card,
+            .stat-card,
+            .legende-mobile {
+                background: #1f2937 !important;
+                color: #f9fafb !important;
+                border-color: #374151 !important;
+            }
+            
+            .search-input {
+                background: #1f2937 !important;
+                border-color: #374151 !important;
+                color: #f9fafb !important;
+            }
+            
+            .tache-mobile {
+                background: #374151 !important;
+                color: #f9fafb !important;
+            }
+            
+            .nav-btn {
+                background: #1f2937 !important;
+                border-color: #374151 !important;
+                color: #f9fafb !important;
+            }
+            
+            .nav-btn:hover, .nav-btn.active {
+                background: #3b82f6 !important;
+                border-color: #3b82f6 !important;
+            }
+            
+            .sticky-progress {
+                background: #1f2937 !important;
+                border-color: #374151 !important;
+            }
+            
+            .tache-title {
+                color: #f9fafb !important;
+            }
+            
+            .tache-details {
+                color: #d1d5db !important;
+            }
+        }
+        
+        /* Animations d'entrée */
+        @keyframes slideInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .semaine-card {
+            animation: slideInUp 0.5s ease-out;
+        }
+        
+        /* Effet de focus amélioré */
+        .tache-mobile:focus-within {
+            transform: scale(1.02);
+            box-shadow: 0 4px 20px rgba(102, 126, 234, 0.3);
+            transition: all 0.3s ease;
+        }
+        
+        /* Indicateur de scroll */
+        .scroll-indicator {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 3px;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            z-index: 1001;
+            transition: width 0.3s ease;
+        }
+        
+        /* Amélioration accessibilité */
+        .sr-only {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+            border: 0;
+        }
+        
+        /* Animation du FAB */
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {
+                transform: translateY(0);
+            }
+            40% {
+                transform: translateY(-10px);
+            }
+            60% {
+                transform: translateY(-5px);
+            }
+        }
+        
+        .fab.animate {
+            animation: bounce 1s;
+        }
+        
+        /* Responsive amélioré pour très petits écrans */
+        @media (max-width: 320px) {
+            .header h1 {
+                font-size: 16px;
+            }
+            
+            .stats {
+                grid-template-columns: 1fr 1fr;
+                gap: 5px;
+            }
+            
+            .stat-card {
+                padding: 8px;
+            }
+            
+            .stat-number {
+                font-size: 18px;
+            }
+            
+            .nav-buttons {
+                gap: 4px;
+            }
+            
+            .nav-btn {
+                padding: 6px 10px;
+                font-size: 11px;
+            }
+        }
+        
+        /* Support pour les écrans larges en mode paysage */
+        @media (orientation: landscape) and (max-height: 500px) {
+            .header {
+                padding: 10px;
+            }
+            
+            .stats {
+                grid-template-columns: repeat(4, 1fr);
+            }
+            
+            .sticky-progress {
+                padding: 5px 15px;
+            }
+        }
+        
+        /* Optimisation pour les connexions lentes */
+        @media (prefers-reduced-motion: reduce) {
+            * {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
+    </style>
     
-    <footer style="text-align: center; margin-top: 20px; color: #7f8c8d; font-size: 12px;">
-        <p>📋 Rétro-planning généré le 28 août 2025 • 🏢 Antilles Consultant • 📍 Madiana, Martinique</p>
-        <p><em>Document de travail - Version 1.0 - À actualiser selon avancement projet</em></p>
-    </footer>
+    <!-- PWA MANIFEST INLINE -->
+    <script>
+        // Ajouter le manifest PWA dynamiquement
+        const manifest = {
+            "name": "Planning Fallon - Madiana 2025",
+            "short_name": "Planning Fallon",
+            "description": "Rétro-planning événement Fallon - 16 octobre 2025",
+            "start_url": "/",
+            "display": "standalone",
+            "orientation": "portrait-primary",
+            "theme_color": "#667eea",
+            "background_color": "#f8f9fa",
+            "icons": [
+                {
+                    "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' fill='%23667eea'/><text x='50' y='65' font-size='60' text-anchor='middle' fill='white'>📋</text></svg>",
+                    "sizes": "192x192",
+                    "type": "image/svg+xml"
+                },
+                {
+                    "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' fill='%23667eea'/><text x='50' y='65' font-size='60' text-anchor='middle' fill='white'>📋</text></svg>",
+                    "sizes": "512x512",
+                    "type": "image/svg+xml"
+                }
+            ]
+        };
+        
+        const manifestBlob = new Blob([JSON.stringify(manifest)], {type: 'application/json'});
+        const manifestURL = URL.createObjectURL(manifestBlob);
+        
+        const link = document.createElement('link');
+        link.rel = 'manifest';
+        link.href = manifestURL;
+        document.head.appendChild(link);
+        
+        // Meta tags PWA
+        const metaTags = [
+            { name: 'theme-color', content: '#667eea' },
+            { name: 'apple-mobile-web-app-capable', content: 'yes' },
+            { name: 'apple-mobile-web-app-status-bar-style', content: 'default' },
+            { name: 'apple-mobile-web-app-title', content: 'Planning Fallon' },
+            { name: 'mobile-web-app-capable', content: 'yes' }
+        ];
+        
+        metaTags.forEach(tag => {
+            const meta = document.createElement('meta');
+            meta.name = tag.name;
+            meta.content = tag.content;
+            document.head.appendChild(meta);
+        });
+    </script>
 </body>
 </html>
+            
+            <!-- SEMAINE 2 -->
+            <div class="semaine-card" data-semaine="2">
+                <div class="semaine-header" onclick="toggleSemaine(2)">
+                    <div>
+                        <div class="semaine-title">SEMAINE 2 • Partenaires</div>
+                        <div class="semaine-dates">1-7 septembre</div>
+                    </div>
+                    <div class="semaine-toggle">▼</div>
+                </div>
+                <div class="semaine-content">
+                    <div class="tache-mobile critique" data-priority="critique">
+                        <div class="urgence-dot"></div>
+                        <div class="tache-title">📧 Envoi dossier partenaires</div>
+                        <div class="tache-details">
+                            <ul>
+                                <li>✅ Finalisation dossier avec tarifs définitifs</li>
+                                <li>🎯 Identification cibles partenaires (liste 20+)</li>
+                                <li>✉️ Personnalisation par type de partenaire</li>
+                                <li>📨 Envoi avec accusé réception</li>
+                            </ul>
+                            <div class="dependance">🔗 Dépend de: Dossier V1</div>
+                        </div>
+                        <div class="tache-meta">
+                            <span class="tache-duration">⏱️ 2 jours</span>
+                            <span class="tache-responsable">📋 Chef projet</span>
+                        </div>
+                    </div>
+                    
+                    <div class="tache-mobile haute" data-priority="haute">
+                        <div class="tache-title">🎨 Identité visuelle - Création</div>
+                        <div class="tache-details">
+                            <ul>
+                                <li>🎨 Recherche concepts et couleurs</li>
+                                <li>📊 3 propositions de charte graphique</li>
+                                <li>🏷️ Déclinaisons logo événement</li>
+                                <li>📐 Maquettes supports (kakemonos/bâches)</li>
+                            </ul>
+                        </div>
+                        <div class="tache-meta">
+                            <span class="tache-duration">⏱️ 3 jours</span>
+                            <span class="tache-responsable">🎨 Designer</span>
+                        </div>
+                    </div>
+                    
+                    <div class="tache-mobile moyenne" data-priority="moyenne">
+                        <div class="tache-title">📋 Liste invités cibles</div>
+                        <div class="tache-details">
+                            <ul>
+                                <li>📂 Segmentation par catégories</li>
+                                <li>💾 Base de données avec contacts</li>
+                                <li>⭐ Priorisation VIP/partenaires</li>
+                                <li>📊 Estimation participants (objectif 150-200)</li>
+                            </ul>
+                        </div>
+                        <div class="tache-meta">
+                            <span class="tache-duration">⏱️ 2 jours</span>
+                            <span class="tache-responsable">📱 Marketing</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- SEMAINE 3 -->
+            <div class="semaine-card" data-semaine="3">
+                <div class="semaine-header" onclick="toggleSemaine(3)">
+                    <div>
+                        <div class="semaine-title">SEMAINE 3 • Validation créa</div>
+                        <div class="semaine-dates">8-14 septembre</div>
+                    </div>
+                    <div class="semaine-toggle">▼</div>
+                </div>
+                <div class="semaine-content">
+                    <div class="tache-mobile critique" data-priority="critique">
+                        <div class="urgence-dot"></div>
+                        <div class="tache-title">✅ Validation identité visuelle</div>
+                        <div class="tache-details">
+                            <ul>
+                                <li>🎨 Choix définitif charte graphique</li>
+                                <li>📏 Validation kakemonos (2m x 0.8m)</li>
+                                <li>🖼️ Validation bâches fond de scène (4m x 2m)</li>
+                                <li>📸 Design photocall avec logo partenaires</li>
+                            </ul>
+                            <div class="dependance">🔗 Dépend de: Créations S2</div>
+                        </div>
+                        <div class="tache-meta">
+                            <span class="tache-duration">⏱️ 1 jour</span>
+                            <span class="tache-responsable">👔 Direction</span>
+                        </div>
+                    </div>
+                    
+                    <div class="tache-mobile haute" data-priority="haute">
+                        <div class="tache-title">🖨️ Lancement production supports</div>
+                        <div class="tache-details">
+                            <ul>
+                                <li>📋 Briefing imprimeur avec fichiers finaux</li>
+                                <li>⏰ Délais de production (15 jours min)</li>
+                                <li>🎨 Choix matériaux et finitions</li>
+                                <li>✅ Validation BAT et devis</li>
+                            </ul>
+                        </div>
+                        <div class="tache-meta">
+                            <span class="tache-duration">⏱️ 1 jour</span>
+                            <span class="tache-responsable">🏭 Production</span>
+                        </div>
+                    </div>
+                    
+                    <div class="tache-mobile moyenne" data-priority="moyenne" data-responsable="Anthony">
+                        <div class="tache-title">📝 Script keynote - Début</div>
+                        <div class="tache-details">
+                            <ul>
+                                <li>📋 Structure présentation (30-45min)</li>
+                                <li>💡 Messages clés et storytelling</li>
+                                <li>🤝 Coordination avec Carine Bernard</li>
+                                <li>🎬 Plan de transitions vidéos</li>
+                            </ul>
+                        </div>
+                        <div class="tache-meta">
+                            <span class="tache-duration">⏱️ 3 jours</span>
+                            <span class="tache-responsable">✍️ Anthony</span>
+                        </div>
+                    </div>
+                    
+                    <div class="tache-mobile moyenne" data-priority="moyenne" data-responsable="Thibault">
+                        <div class="tache-title">🎬 Visuels vidéos - Préparation</div>
+                        <div class="tache-details">
+                            <ul>
+                                <li>📋 Storyboard animations</li>
+                                <li>🔍 Recherche assets visuels</li>
+                                <li>🎨 Templates motion design</li>
+                                <li>🎥 Planning tournage si nécessaire</li>
+                            </ul>
+                        </div>
+                        <div class="tache-meta">
+                            <span class="tache-duration">⏱️ 3 jours</span>
+                            <span class="tache-responsable">🎬 Thibault</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- SEMAINE 4 -->
+            <div class="semaine-card" data-semaine="4">
+                <div class="semaine-header" onclick="toggleSemaine(4)">
+                    <div>
+                        <div class="semaine-title">SEMAINE 4 • Invitations</div>
+                        <div class="semaine-dates">15-21 septembre</div>
+                    </div>
+                    <div class="semaine-toggle">▼</div>
+                </div>
+                <div class="semaine-content">
+                    <div class="tache-mobile critique" data-priority="critique">
+                        <div class="urgence-dot"></div>
+                        <div class="tache-title">📱 Invitations digitales + QR</div>
+                        <div class="tache-details">
+                            <ul>
+                                <li>🎨 Design invitation personnalisée</li>
+                                <li>📱 Intégration QR code unique par invité</li>
+                                <li>🔗 Lien vers formulaire inscription</li>
+                                <li>🧪 Test complet du parcours utilisateur</li>
+                            </ul>
+                        </div>
+                        <div class="tache-meta">
+                            <span class="tache-duration">⏱️ 2 jours</span>
+                            <span class="tache-responsable">📱 Digital</span>
+                        </div>
+                    </div>
+                    
+                    <div class="tache-mobile haute" data-priority="haute">
+                        <div class="tache-title">⚙️ Système d'inscriptions</div>
+                        <div class="tache-details">
+                            <ul>
+                                <li>⚙️ Configuration CRM/base données</li>
+                                <li>📱 Programmation scan QR code</li>
+                                <li>💻 Interface gestion accueil</li>
+                                <li>📱 Tests avec différents smartphones</li>
+                            </ul>
+                        </div>
+                        <div class="tache-meta">
+                            <span class="tache-duration">⏱️ 2 jours</span>
+                            <span class="tache-responsable">💻 Développeur</span>
+                        </div>
+                    </div>
+                    
+                    <div class="tache-mobile moyenne" data-priority="moyenne" data-responsable="Thibault">
+                        <div class="tache-title">🎥 Vidéos teaser + animations</div>
+                        <div class="tache-details">
+                            <ul>
+                                <li>🎬 Production teaser 30-60sec</li>
+                                <li>✨ Animations pour présentation</li>
+                                <li>🔄 Transitions entre slides</li>
+                                <li>💾 Export formats multiples</li>
+                            </ul>
+                            <div class="dependance">🔗 Dépend de: Thibault S3</div>
+                        </div>
+                        <div class="tache-meta">
+                            <span class="tache-duration">⏱️ 4 jours</span>
+                            <span class="tache-responsable">🎬 Thibault</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
